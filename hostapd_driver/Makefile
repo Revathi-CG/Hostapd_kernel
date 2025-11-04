@@ -139,6 +139,7 @@ ccflags-y += -I./hostapd-2.11/hostapd \
 ./hostapd-2.11/src/utils \
 ./hostapd-2.11/src/wps
 
+ccflags-y += -I./porting
 all:
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
 
