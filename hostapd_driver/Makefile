@@ -118,6 +118,26 @@ hostapd_driver-objs := 	hostapd-2.11/hostapd/main.o \
 	hostapd-2.11/hostapd/../src/utils/edit_simple.o
 
 
+ccflags-y += -I./hostapd-2.11/hostapd \
+./hostapd-2.11/src/ap \
+./hostapd-2.11/src/common \
+./hostapd-2.11/src/crypto \
+./hostapd-2.11/src/drivers \
+./hostapd-2.11/src/eap_common \
+./hostapd-2.11/src/eapol_auth \
+./hostapd-2.11/src/eapol_supp \
+./hostapd-2.11/src/eap_peer \
+./hostapd-2.11/src/eap_server \
+./hostapd-2.11/src/fst \
+./hostapd-2.11/src/l2_packet \
+./hostapd-2.11/src/p2p \
+./hostapd-2.11/src/pae \
+./hostapd-2.11/src/pasn \
+./hostapd-2.11/src/radius \
+./hostapd-2.11/src/rsn_supp \
+./hostapd-2.11/src/tls \
+./hostapd-2.11/src/utils \
+./hostapd-2.11/src/wps
 
 all:
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
