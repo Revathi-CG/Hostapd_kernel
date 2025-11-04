@@ -118,26 +118,28 @@ hostapd_driver-objs := 	hostapd-2.11/hostapd/main.o \
 	hostapd-2.11/hostapd/../src/utils/edit_simple.o
 
 
-ccflags-y += -I./hostapd-2.11/hostapd \
-./hostapd-2.11/src/ap \
-./hostapd-2.11/src/common \
-./hostapd-2.11/src/crypto \
-./hostapd-2.11/src/drivers \
-./hostapd-2.11/src/eap_common \
-./hostapd-2.11/src/eapol_auth \
-./hostapd-2.11/src/eapol_supp \
-./hostapd-2.11/src/eap_peer \
-./hostapd-2.11/src/eap_server \
-./hostapd-2.11/src/fst \
-./hostapd-2.11/src/l2_packet \
-./hostapd-2.11/src/p2p \
-./hostapd-2.11/src/pae \
-./hostapd-2.11/src/pasn \
-./hostapd-2.11/src/radius \
-./hostapd-2.11/src/rsn_supp \
-./hostapd-2.11/src/tls \
-./hostapd-2.11/src/utils \
-./hostapd-2.11/src/wps
+ccflags-y += -I./hostapd-2.11/hostapd 
+ccflags-y += -I./hostapd-2.11/src/ap 
+ccflags-y += -I./hostapd-2.11/src/common 
+ccflags-y += -I./hostapd-2.11/src/crypto 
+ccflags-y += -I./hostapd-2.11/src/drivers 
+ccflags-y += -I./hostapd-2.11/src/eap_common 
+ccflags-y += -I./hostapd-2.11/src/eapol_auth 
+ccflags-y += -I./hostapd-2.11/src/eapol_supp 
+ccflags-y += -I./hostapd-2.11/src/eap_peer 
+ccflags-y += -I./hostapd-2.11/src/eap_server 
+ccflags-y += -I./hostapd-2.11/src/fst 
+ccflags-y += -I./hostapd-2.11/src/l2_packet 
+ccflags-y += -I./hostapd-2.11/src/p2p 
+ccflags-y += -I./hostapd-2.11/src/pae 
+ccflags-y += -I./hostapd-2.11/src/pasn 
+ccflags-y += -I./hostapd-2.11/src/radius 
+ccflags-y += -I./hostapd-2.11/src/rsn_supp 
+ccflags-y += -I./hostapd-2.11/src/tls 
+ccflags-y += -I./hostapd-2.11/src/utils 
+ccflags-y += -I./hostapd-2.11/src/wps
+ccflags-y += -I./hostapd-2.11/src
+
 
 ccflags-y += -I./porting
 all:
