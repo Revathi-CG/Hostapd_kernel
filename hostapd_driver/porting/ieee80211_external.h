@@ -1,0 +1,4 @@
+#ifndef __IEEE80211_EXTERNAL_H_
+#define __IEEE80211_EXTERNAL_H_
+
+#endif /* __IEEE80211_EXTERNAL_H_ */

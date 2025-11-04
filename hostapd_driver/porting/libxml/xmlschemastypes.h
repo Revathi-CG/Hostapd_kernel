@@ -1,0 +1,4 @@
+#ifndef __XMLSCHEMASTYPES_H_
+#define __XMLSCHEMASTYPES_H_
+
+#endif /* __XMLSCHEMASTYPES_H_ */

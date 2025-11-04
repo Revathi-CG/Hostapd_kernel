@@ -1,0 +1,4 @@
+#ifndef __IEEE80211_FREEBSD_H_
+#define __IEEE80211_FREEBSD_H_
+
+#endif /* __IEEE80211_FREEBSD_H_ */
