@@ -44,7 +44,7 @@ hostapd_driver-objs := 	hostapd-2.11/hostapd/main.o \
 	hostapd-2.11/hostapd/../src/ap/vlan_init.o \
 	hostapd-2.11/hostapd/../src/ap/vlan_ifconfig.o \
 	hostapd-2.11/hostapd/../src/ap/vlan.o \
-	hostapd-2.11/hostapd/../src/common/ctrl_iface_common.c \
+	hostapd-2.11/hostapd/../src/common/ctrl_iface_common.o \
 	hostapd-2.11/hostapd/ctrl_iface.o \
 	hostapd-2.11/hostapd/../src/ap/ctrl_iface_ap.o \
 	hostapd-2.11/hostapd/../src/drivers/driver_hostap.o \
@@ -117,6 +117,7 @@ hostapd_driver-objs := 	hostapd-2.11/hostapd/main.o \
 	hostapd-2.11/hostapd/../src/common/cli.o \
 	hostapd-2.11/hostapd/../src/utils/edit_simple.o
 
+ccflags-y += -I./porting -include porting/includes.h
 
 ccflags-y += -I./hostapd-2.11/hostapd 
 ccflags-y += -I./hostapd-2.11/src/ap 
@@ -141,7 +142,6 @@ ccflags-y += -I./hostapd-2.11/src/wps
 ccflags-y += -I./hostapd-2.11/src
 
 
-ccflags-y += -I./porting
 all:
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
 
