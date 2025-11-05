@@ -10,5 +10,12 @@
 #define malloc(size) kmalloc((size), GFP_KERNEL)
 #define free(ptr) kfree(ptr)
 
+/* Kernel-compatible stub for exit() */
+static inline void exit(int code)
+{
+    /* In kernel space, we cannot exit a process.
+       So, we do nothing or optionally print a warning. */
+    printk(KERN_WARNING "hostapd called exit(%d) in kernel space - ignored\n", code);
+}
 
 #endif
