@@ -5,6 +5,8 @@
 #include <linux/printk.h>
 #include <linux/stdarg.h>
 
+/* Dummy stderr pointer */
+#define stderr ((void*)0)
 
 typedef void FILE;
 
