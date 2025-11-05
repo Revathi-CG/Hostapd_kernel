@@ -4,7 +4,8 @@
 #include <linux/kernel.h>  // For printk
 #include <linux/printk.h>
 #include <linux/stdarg.h>  // For va_list
-
+#include <linux/slab.h>     // For kmalloc and kfree
+			    
 /* Fake syslog priority values for kernel build */
 #define LOG_EMERG   0
 #define LOG_ALERT   1
@@ -44,13 +45,15 @@ static inline void syslog(int priority, const char *fmt, ...)
     default:          klevel = KERN_INFO; break;
     }
 
-    char buf[1024];
+        char *buf = kmalloc(1024, GFP_KERNEL);
+    if (!buf) return;
     va_list args;
     va_start(args, fmt);
-    vsnprintf(buf, sizeof(buf), fmt, args);   // format string safely
+    vsnprintf(buf, 1024, fmt, args);   // format string safely
     va_end(args);
 
     printk("%s%s", klevel, buf);  // prepend KERN_* prefix
+    kfree(buf);
 }
 
 #endif
