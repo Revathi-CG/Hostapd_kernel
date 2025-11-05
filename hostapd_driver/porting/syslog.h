@@ -15,6 +15,17 @@
 #define LOG_INFO    6
 #define LOG_DEBUG   7
 
+/* Stub functions for kernel space (no-op) */
+static inline void openlog(const char *ident, int option, int facility)
+{
+    /* Do nothing in kernel build */
+}
+
+static inline void closelog(void)
+{
+    /* Do nothing in kernel build */
+}
+
 /* Kernel-compatible syslog stub */
 static inline void syslog(int priority, const char *fmt, ...)
 {
