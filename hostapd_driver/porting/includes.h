@@ -11,6 +11,7 @@
 
 /* This file gets force-included via Makefile to override random_init() */
 #include "random.h"
+#include "errno.h"
 
 #endif
 
