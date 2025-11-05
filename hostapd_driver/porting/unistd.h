@@ -11,4 +11,7 @@ static inline int getopt(int argc, char * const argv[], const char *optstring)
 /* Provide stub for optind if code uses it */
 static int optind = 1;
 
+/* Stub for optarg in kernel space */
+static char *optarg = NULL;
+
 #endif
