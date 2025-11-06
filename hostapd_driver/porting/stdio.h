@@ -8,7 +8,6 @@
 /* Dummy stderr pointer */
 #define stderr ((void*)0)
 
-typedef void FILE;
 
 /* Kernel-compatible fprintf stub */
 static inline int fprintf(void *stream, const char *fmt, ...)

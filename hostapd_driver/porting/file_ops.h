@@ -1,36 +1,37 @@
 #ifndef __FILE_OPS_H
 #define __FILE_OPS_H
 
-#include <linux/fs.h>
-#include <linux/slab.h>
-#include <linux/uaccess.h>
-#include "syslog.h"   // your existing syslog header
+#pragma once
 
-// Open a file in kernel space
-static inline struct file *k_fopen(const char *path, int flags, umode_t mode)
+#include <linux/fs.h>       // struct file, filp_open(), filp_close()
+#include <linux/kernel.h>   // kernel_read()
+#include <linux/uaccess.h>  // needed for file ops
+
+// fopen → kernel file open
+static inline FILE *k_fopen(const char *path, const char *mode)
 {
-    struct file *f = filp_open(path, flags, mode);
-    if (IS_ERR(f)) return NULL;
-    return f;
+    int flags = O_RDONLY;   // mode ignored for now
+    return filp_open(path, flags, 0);
 }
 
-// Read from a kernel-space file
-static inline ssize_t k_fread(struct file *f, char *buf, size_t len, loff_t *pos)
+// fgets → read from kernel file
+static inline char *k_fgets(char *buf, size_t size, FILE *fp)
 {
-    if (!f || !buf) return -EINVAL;
-    mm_segment_t old_fs = get_fs();
-    set_fs(KERNEL_DS);
-    ssize_t ret = kernel_read(f, buf, len, pos);
-    set_fs(old_fs);
-    return ret;
+    loff_t pos = fp->f_pos;
+    int ret = kernel_read(fp, buf, size - 1, &pos);
+
+    if (ret <= 0)
+        return NULL;
+
+    buf[ret] = '\0';
+    fp->f_pos = pos;
+    return buf;
 }
 
-// Close a kernel-space file
-static inline int k_fclose(struct file *f)
+// fclose → kernel file close
+static inline int k_fclose(FILE *fp)
 {
-    if (!f) return -EINVAL;
-    filp_close(f, NULL);
-    return 0;
+    return filp_close(fp, NULL);
 }
 
 #endif

@@ -8,6 +8,13 @@
 	#include <linux/in.h>      // struct in_addr
 	#include <linux/in6.h>     // struct in6_addr
 
+// Hostapd expects FILE*
+// Replace FILE with struct file (kernel)
+typedef struct file FILE;
+#define fopen(path, mode)        k_fopen(path, mode)
+#define fgets(buf, size, fp)     k_fgets(buf, size, fp)
+#define fclose(fp)               k_fclose(fp)
+
 
 /* This file gets force-included via Makefile to override random_init() */
 #include "random.h"
