@@ -69,9 +69,10 @@ static inline int k_atoi(const char *str)
 void qsort(void *base, size_t nmemb, size_t size,
            int (*compar)(const void *, const void *));
 
-
-
 #endif
+// forward declaration (instead of including pbkdf2.h)
+int pbkdf2_sha1(const char *passphrase, const unsigned char *ssid, size_t ssid_len,
+                int iterations, unsigned char *buf, size_t buflen);
 
 
 #endif
