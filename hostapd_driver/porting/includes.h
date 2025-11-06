@@ -29,5 +29,17 @@ typedef struct file FILE;
 #include "common.h"
 #include "file_ops.h"
 
+// Replace atoi() with kstrtoint() for kernel environment
+#include <linux/kernel.h>    // kstrtoint()
+
+static inline int k_atoi(const char *str)
+{
+    int val = 0;
+    kstrtoint(str, 10, &val);
+    return val;
+}
+
+#define atoi(x) k_atoi(x)
+
 #endif
 
