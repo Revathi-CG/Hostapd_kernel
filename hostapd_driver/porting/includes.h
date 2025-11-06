@@ -34,10 +34,28 @@ typedef struct file FILE;
 // Replace atoi() with kstrtoint() for kernel environment
 #include <linux/kernel.h>    // kstrtoint()
 
+/* required for size_t */
+#include <linux/types.h>
+#include <linux/kernel.h>
+#include <linux/kstrtox.h>     // kstrtoul(), kstrtoint()
+
+/* ---- Replacement for strtoul() ---- */
+static inline unsigned long strtoul(const char *str, char **endp, int base)
+{
+    unsigned long val = 0;
+        int ret = kstrtoul(str, base, &val);   // handle return value to avoid warning
+    (void)ret;                             // silence unused warning
+
+    if (endp)
+	    *endp = (char *)str;  // hostapd never uses endp
+    return val;
+}
+/*........atoi*/
 static inline int k_atoi(const char *str)
 {
     int val = 0;
-    kstrtoint(str, 10, &val);
+        int ret = kstrtoint(str, 10, &val);    // handle return
+        (void)ret;
     return val;
 }
 
