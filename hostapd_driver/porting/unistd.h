@@ -9,9 +9,9 @@ static inline int getopt(int argc, char * const argv[], const char *optstring)
 }
 
 /* Provide stub for optind if code uses it */
-static int optind = 1;
+static int optind  __attribute__((unused)) = 1;
 
 /* Stub for optarg in kernel space */
-static char *optarg = NULL;
+static char *optarg  __attribute__((unused))= NULL;
 
 #endif
