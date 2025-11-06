@@ -142,6 +142,7 @@ ccflags-y += -I./hostapd-2.11/src/wps
 ccflags-y += -I./hostapd-2.11/src
 ccflags-y += -Wno-implicit-fallthrough
 ccflags-y += -Wno-strict-prototypes
+ccflags-y += -Wno-frame-larger-than
 
 
 all:
