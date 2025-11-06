@@ -145,6 +145,7 @@ ccflags-y += -Wno-strict-prototypes
 ccflags-y += -Wno-frame-larger-than
 ccflags-y += -Wno-overflow -Wno-sign-conversion
 ccflags-y += -Wno-format -Wno-format-extra-args
+ccflags-y += -Wno-undef
 
 
 
