@@ -74,6 +74,11 @@ void qsort(void *base, size_t nmemb, size_t size,
 int pbkdf2_sha1(const char *passphrase, const unsigned char *ssid, size_t ssid_len,
                 int iterations, unsigned char *buf, size_t buflen);
 
+#include <linux/ip.h>
+#include <linux/udp.h>
+
+/* Map struct ip → struct iphdr for hostapd */
+#define ip     iphdr
 
 #endif
 
