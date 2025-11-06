@@ -17,6 +17,7 @@
 #include "string.h"
 #include "grp.h"
 #include "common.h"
+#include "file_ops.h"
 
 #endif
 
