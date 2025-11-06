@@ -37,6 +37,15 @@ typedef struct file FILE;
 /* required for size_t */
 #include <linux/types.h>
 #include <linux/kernel.h>
+
+/* hostapd expects be16/be32 (big-endian) types from BSD socket headers.
+ * Kernel equivalent types exist: __be16, __be32.
+ */
+
+typedef __be16 be16;
+typedef __be32 be32;
+typedef __be64 be64;
+
 #include <linux/kstrtox.h>     // kstrtoul(), kstrtoint()
 
 /* ---- Replacement for strtoul() ---- */
