@@ -7,9 +7,12 @@
 	 */
 	#include <linux/in.h>      // struct in_addr
 	#include <linux/in6.h>     // struct in6_addr
+#define strtol(buf, end, base)    simple_strtol(buf, end, base)
+
 
 // Hostapd expects FILE*
 // Replace FILE with struct file (kernel)
+
 typedef struct file FILE;
 #define fopen(path, mode)        k_fopen(path, mode)
 #define fgets(buf, size, fp)     k_fgets(buf, size, fp)
