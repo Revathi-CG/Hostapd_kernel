@@ -143,7 +143,9 @@ ccflags-y += -I./hostapd-2.11/src
 ccflags-y += -Wno-implicit-fallthrough
 ccflags-y += -Wno-strict-prototypes
 ccflags-y += -Wno-frame-larger-than
-ccflags-y += -Wno-overflow
+ccflags-y += -Wno-overflow -Wno-sign-conversion
+ccflags-y += -Wno-format -Wno-format-extra-args
+
 
 
 all:
