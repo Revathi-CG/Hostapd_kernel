@@ -34,6 +34,7 @@ typedef struct file FILE;
 #include "aes_encrypt_fix.h"
 #include "sha1_prf_fix.h"
 #include "byteswap.h"
+#include "signal.h"
 
 // Replace atoi() with kstrtoint() for kernel environment
 #include <linux/kernel.h>    // kstrtoint()
