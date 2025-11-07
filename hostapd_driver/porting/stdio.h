@@ -14,6 +14,11 @@
 /* Redirect vprintf -> vprintk */
 #define vprintf(fmt, ap) vprintk(fmt, ap)
 
+/* Stub out stdout, setvbuf, and _IOLBF */
+#define stdout NULL
+#define _IOLBF 0
+static inline int setvbuf(void *stream, char *buf, int mode, size_t size) { return 0; }
+
 /* Kernel-compatible fprintf stub */
 static inline int fprintf(void *stream, const char *fmt, ...)
 {
