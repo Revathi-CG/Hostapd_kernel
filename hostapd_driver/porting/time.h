@@ -64,6 +64,10 @@ static inline void usleep(unsigned int usec)
     }
 }
 
-
+static inline long mktime(struct tm *tm)
+{
+    /* Return 0 or implement a basic kernel-space calculation if needed */
+    return 0;
+}
 
 #endif /* __TIME_H_ */
