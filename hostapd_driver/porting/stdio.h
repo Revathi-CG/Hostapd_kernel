@@ -8,6 +8,8 @@
 /* Dummy stderr pointer */
 #define stderr ((void*)0)
 
+/* Redirect printf -> printk */
+#define printf(fmt, ...) printk(KERN_INFO fmt, ##__VA_ARGS__)
 
 /* Kernel-compatible fprintf stub */
 static inline int fprintf(void *stream, const char *fmt, ...)
