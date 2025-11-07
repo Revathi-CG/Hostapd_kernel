@@ -24,7 +24,7 @@ typedef struct file FILE;
 #include "random.h"
 #include "errno.h"
 #include "stdlib.h"
-
+#include "time.h"
 
 #include "string.h"
 #include "grp.h"
