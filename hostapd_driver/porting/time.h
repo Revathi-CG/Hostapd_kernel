@@ -5,7 +5,8 @@
 #include <linux/delay.h>
 #include <linux/timekeeping.h> // for ktime_get_real_ts64
 #include <linux/types.h>       // for __kernel_long_t
-
+#include <linux/time.h> // Provides struct tm
+			
 #include "signal.h"
 
 
@@ -68,6 +69,15 @@ static inline long mktime(struct tm *tm)
 {
     /* Return 0 or implement a basic kernel-space calculation if needed */
     return 0;
+}
+
+/* Stub localtime: return pointer to static struct tm */
+static inline struct tm *localtime(const long *timep)
+{
+    static struct tm tm_stub;
+    /* zero out all fields to avoid garbage */
+    memset(&tm_stub, 0, sizeof(tm_stub));
+    return &tm_stub;
 }
 
 #endif /* __TIME_H_ */
