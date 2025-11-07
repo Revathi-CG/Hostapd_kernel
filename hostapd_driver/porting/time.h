@@ -1,8 +1,27 @@
 #ifndef __TIME_H_
 #define __TIME_H_
 
-#include <linux/delay.h>
 
+#include <linux/delay.h>
+#include <linux/timekeeping.h> // for ktime_get_real_ts64
+#include <linux/types.h>       // for __kernel_long_t
+
+#include "signal.h"
+
+/* Stub gettimeofday() for kernel space */
+static inline int gettimeofday(struct timeval *tv, void *tz)
+{
+    if (!tv)
+        return -1;
+
+    struct timespec64 ts;
+    ktime_get_real_ts64(&ts);
+
+    tv->tv_sec = ts.tv_sec;
+    tv->tv_usec = ts.tv_nsec / 1000;
+
+    return 0;
+}
 /* Replace userspace sleep(sec) with kernel sleep in seconds */
 static inline void sleep(unsigned int sec) {
     ssleep(sec);
@@ -16,5 +35,7 @@ static inline void usleep(unsigned int usec)
         usleep_range(usec, usec + 100); // proper sleep for longer delays
     }
 }
+
+
 
 #endif /* __TIME_H_ */
