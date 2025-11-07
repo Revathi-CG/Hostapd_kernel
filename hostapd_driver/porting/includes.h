@@ -11,7 +11,6 @@
 #define strtol(buf, end, base)    simple_strtol(buf, end, base)
 
 
-
 // Hostapd expects FILE*
 // Replace FILE with struct file (kernel)
 
@@ -26,11 +25,14 @@ typedef struct file FILE;
 #include "errno.h"
 #include "stdlib.h"
 
+
 #include "string.h"
 #include "grp.h"
 #include "common.h"
 #include "file_ops.h"
 #include "wpabuf_fix.h"
+#include "aes_encrypt_fix.h"
+
 // Replace atoi() with kstrtoint() for kernel environment
 #include <linux/kernel.h>    // kstrtoint()
 
@@ -45,10 +47,6 @@ typedef struct file FILE;
 typedef __be16 be16;
 typedef __be32 be32;
 typedef __be64 be64;
-
-#ifndef PRINTF_FORMAT
-#define PRINTF_FORMAT(a, b)  /* nothing */
-#endif
 
 
 #include <linux/kstrtox.h>     // kstrtoul(), kstrtoint()
