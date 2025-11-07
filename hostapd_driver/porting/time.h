@@ -8,6 +8,9 @@
 
 #include "signal.h"
 
+
+typedef long time_t;  /* kernel-compatible stub */
+
 /* Stub gettimeofday() for kernel space */
 static inline int gettimeofday(struct timeval *tv, void *tz)
 {
