@@ -118,7 +118,7 @@ hostapd_driver-objs := 	hostapd-2.11/hostapd/main.o \
 	hostapd-2.11/hostapd/../src/utils/edit_simple.o
 
 ccflags-y += -I./porting -include porting/includes.h
-
+EXTRA_CFLAGS += -include $(PWD)/hostapd-2.11/src/utils/common.h
 ccflags-y += -I./hostapd-2.11/hostapd 
 ccflags-y += -I./hostapd-2.11/src/ap 
 ccflags-y += -I./hostapd-2.11/src/common 
