@@ -32,6 +32,21 @@ static inline void timespec_now(struct timespec *ts)
     ts->tv_nsec = ts64.tv_nsec;
 }
 
+/* Stub clock_gettime for kernel space */
+static inline int clock_gettime(int clk_id, struct timespec *ts)
+{
+    if (!ts)
+        return -1;
+
+    struct timespec64 ts64;
+    ktime_get_real_ts64(&ts64);
+
+    ts->tv_sec = ts64.tv_sec;
+    ts->tv_nsec = ts64.tv_nsec;
+
+    return 0;
+}
+
 /* Replace userspace sleep(sec) with kernel sleep in seconds */
 static inline void sleep(unsigned int sec) {
     ssleep(sec);
