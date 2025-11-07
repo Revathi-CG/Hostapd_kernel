@@ -24,6 +24,11 @@ struct timeval {
 };
 #endif
 
+struct timespec {
+    __s64 tv_sec;
+    long tv_nsec;
+};
+
 /*
  * DO NOT typedef fd_set. Kernel already defines it.
  * Simply forward declare the struct to silence compiler warnings.

@@ -22,6 +22,16 @@ static inline int gettimeofday(struct timeval *tv, void *tz)
 
     return 0;
 }
+
+/* Optional: helper to convert ktime_get_real_ts64 to struct timespec */
+static inline void timespec_now(struct timespec *ts)
+{
+    struct timespec64 ts64;
+    ktime_get_real_ts64(&ts64);
+    ts->tv_sec = ts64.tv_sec;
+    ts->tv_nsec = ts64.tv_nsec;
+}
+
 /* Replace userspace sleep(sec) with kernel sleep in seconds */
 static inline void sleep(unsigned int sec) {
     ssleep(sec);
