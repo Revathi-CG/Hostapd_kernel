@@ -95,5 +95,19 @@ int pbkdf2_sha1(const char *passphrase, const unsigned char *ssid, size_t ssid_l
 /* Map struct ip → struct iphdr for hostapd */
 #define ip     iphdr
 
+/* Kernel-space replacement for daemon() */
+#ifndef PORTING_DAEMON_OVERRIDE
+#define PORTING_DAEMON_OVERRIDE
+
+/* Replace userspace daemon() with a stub that returns success */
+static inline int daemon(int nochdir, int noclose)
+{
+    /* kernel modules cannot daemonize */
+    return 0;
+}
+
+#endif
+
+
 #endif
 
