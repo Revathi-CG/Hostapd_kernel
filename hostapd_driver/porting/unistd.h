@@ -92,4 +92,15 @@ static inline char *getcwd(char *buf, size_t size)
     return IS_ERR(tmp) ? NULL : tmp;
 }
 
+#pragma once
+
+// stub setenv() for kernel space
+static inline int setenv(const char *name, const char *value, int overwrite)
+{
+    // Kernel space has no process-level environment variables.
+    // Just pretend that setting the variable worked.
+    return 0;
+}
+
+
 #endif
