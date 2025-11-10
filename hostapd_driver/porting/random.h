@@ -22,5 +22,17 @@ static inline void hostapd_random_init(const char *entropy_file)
 //    (void) entropy_file;  // prevent unused variable warning
 }
 
+// Userspace random() → kernel get_random_u32()
+static inline long random(void)
+{
+    return (long)get_random_u32();
+}
+
+static inline void srandom(unsigned int seed)
+{
+    // No-op in kernel, random generator is already seeded
+}
+
+
 #endif /* __RANDOM_H_ */
 
