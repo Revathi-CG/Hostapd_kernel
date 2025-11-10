@@ -80,4 +80,26 @@ static inline struct tm *localtime(const long *timep)
     return &tm_stub;
 }
 
+
+#ifndef _KERNEL_TIME_PORTING_
+#define _KERNEL_TIME_PORTING_
+
+#include <linux/timekeeping.h>   // for ktime_get_real_seconds()
+
+/* Kernel replacement for gmtime() */
+static inline struct tm *gmtime(const time_t *timep)
+{
+    static struct tm tm_stub;
+    time64_t t = *timep;
+
+    /* Convert UNIX timestamp into UTC breakdown */
+    time64_to_tm(t, 0, &tm_stub);
+
+    return &tm_stub;
+}
+
+#endif
+
+
+
 #endif /* __TIME_H_ */
