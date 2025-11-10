@@ -102,5 +102,12 @@ static inline int setenv(const char *name, const char *value, int overwrite)
     return 0;
 }
 
+// stub unsetenv() for kernel space
+static inline int unsetenv(const char *name)
+{
+    // No environment variables exist in kernel modules.
+    return 0;
+}
+
 
 #endif
