@@ -1,6 +1,15 @@
 #ifndef __UNISTD_H_
 #define __UNISTD_H_
 
+#include <linux/fs.h>
+#include <linux/dcache.h>
+#include <linux/path.h>
+#include <linux/sched.h>
+#include <linux/mount.h>
+#include <linux/namei.h>
+#include <linux/version.h>
+#include <linux/fs_struct.h>   // REQUIRED for get_pwd()
+
 /* Kernel-space stub for getopt */
 static inline int getopt(int argc, char * const argv[], const char *optstring)
 {
@@ -66,5 +75,21 @@ static inline int unlink(const char *path)
 
 #endif
 
+static inline char *getcwd(char *buf, size_t size)
+{
+    struct path pwd;
+    char *tmp;
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,17,0)
+    // New API
+//    get_pwd(current, &pwd);
+#else
+    // Old API
+    get_fs_pwd(current->fs, &pwd);
+#endif
+
+    tmp = d_path(&pwd, buf, size);
+
+    return IS_ERR(tmp) ? NULL : tmp;
+}
 
 #endif
