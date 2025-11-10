@@ -108,6 +108,7 @@ static inline int daemon(int nochdir, int noclose)
 
 #endif
 
+#include "perror.h"
 
 #endif
 
