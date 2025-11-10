@@ -27,5 +27,44 @@ static inline int getpid(void)
 
 #endif
 
+#ifndef _PORTING_UNISTD_H
+#define _PORTING_UNISTD_H
+
+#include <linux/fs.h>
+#include <linux/namei.h>
+#include <linux/version.h>
+
+static inline int unlink(const char *path)
+{
+    struct path kpath;
+    int err;
+
+    err = kern_path(path, LOOKUP_FOLLOW, &kpath);
+    if (err)
+        return err;
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6,3,0)
+    {
+        struct mnt_idmap *idmap = NULL;
+
+        err = vfs_unlink(
+                idmap,
+                d_inode(kpath.dentry->d_parent),
+                kpath.dentry,
+                NULL);
+    }
+#else
+    err = vfs_unlink(
+            d_inode(kpath.dentry->d_parent),
+            kpath.dentry,
+            NULL);
+#endif
+
+    path_put(&kpath);
+    return err;
+}
+
+#endif
+
 
 #endif
