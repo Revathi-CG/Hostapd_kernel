@@ -8,6 +8,11 @@
 #include <linux/uaccess.h>  // needed for file ops
 
 #define FILE struct file
+#define fseek   k_fseek
+#define ftell   k_ftell
+#define fopen(path, mode)        k_fopen(path, mode)
+#define fgets(buf, size, fp)     k_fgets(buf, size, fp)
+#define fclose(fp)               k_fclose(fp)
 
 // fopen → kernel file open
 static inline FILE *k_fopen(const char *path, const char *mode)
@@ -47,6 +52,32 @@ static inline size_t fread(void *ptr, size_t size, size_t nmemb, FILE *fp)
 
     fp->f_pos = pos;
     return ret;
+}
+
+// fseek → move cursor in file
+static inline int k_fseek(FILE *fp, loff_t offset, int whence)
+{
+    loff_t new_pos;
+
+    switch (whence) {
+    case SEEK_SET:
+        new_pos = offset;
+        break;
+    case SEEK_CUR:
+        new_pos = fp->f_pos + offset;
+        break;
+    default:
+        return -EINVAL;
+    }
+
+    fp->f_pos = new_pos;
+    return 0;
+}
+
+// ftell → get current cursor position
+static inline long k_ftell(FILE *fp)
+{
+    return fp->f_pos;
 }
 
 

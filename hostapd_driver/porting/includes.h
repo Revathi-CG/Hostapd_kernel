@@ -14,10 +14,10 @@
 // Hostapd expects FILE*
 // Replace FILE with struct file (kernel)
 
-typedef struct file FILE;
-#define fopen(path, mode)        k_fopen(path, mode)
-#define fgets(buf, size, fp)     k_fgets(buf, size, fp)
-#define fclose(fp)               k_fclose(fp)
+//typedef struct file FILE;
+//#define fopen(path, mode)        k_fopen(path, mode)
+//#define fgets(buf, size, fp)     k_fgets(buf, size, fp)
+//#define fclose(fp)               k_fclose(fp)
 
 
 /* This file gets force-included via Makefile to override random_init() */
