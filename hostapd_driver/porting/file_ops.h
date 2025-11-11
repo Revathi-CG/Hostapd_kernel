@@ -14,6 +14,9 @@
 #define fgets(buf, size, fp)     k_fgets(buf, size, fp)
 #define fclose(fp)               k_fclose(fp)
 #define access k_access
+#ifndef F_OK
+#define F_OK 0   // "file exists" check flag used by access()
+#endif
 
 // fopen → kernel file open
 static inline FILE *k_fopen(const char *path, const char *mode)
