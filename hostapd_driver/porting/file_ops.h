@@ -19,6 +19,7 @@
 #endif
 #define fflush(stream) k_fflush(stream)
 #define fdatasync(fp) k_fdatasync(fp)
+#define fileno(fp) k_fileno(fp)
 
 
 // fopen → kernel file open
@@ -111,6 +112,12 @@ static inline int k_fdatasync(FILE *fp)
 {
     // vfs_fsync flushes data & metadata to disk, closest match to fdatasync()
     return vfs_fsync(fp, 0);
+}
+
+// fileno() replacement (kernel FILE = struct file*)
+static inline FILE *k_fileno(FILE *fp)
+{
+    return fp;  // we keep FILE as struct file* directly
 }
 
 
