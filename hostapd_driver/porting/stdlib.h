@@ -8,6 +8,9 @@
 
 // Replace malloc and free too
 #define malloc(size) kmalloc((size), GFP_KERNEL)
+// calloc() mapping → kernel equivalent
+#define calloc(n, size) k_calloc(n, size)
+
 #define free(ptr) kfree(ptr)
 
 /* Kernel-compatible stub for exit() */
@@ -17,5 +20,11 @@ static inline void exit(int code)
        So, we do nothing or optionally print a warning. */
     printk(KERN_WARNING "hostapd called exit(%d) in kernel space - ignored\n", code);
 }
+
+static inline void *k_calloc(size_t n, size_t size)
+{
+    return kzalloc(n * size, GFP_KERNEL);   // kernel zeroed allocation
+}
+
 
 #endif
