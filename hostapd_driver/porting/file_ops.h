@@ -17,6 +17,7 @@
 #ifndef F_OK
 #define F_OK 0   // "file exists" check flag used by access()
 #endif
+#define fflush(stream) k_fflush(stream)
 
 // fopen → kernel file open
 static inline FILE *k_fopen(const char *path, const char *mode)
@@ -93,6 +94,14 @@ static inline int k_access(const char *path, int mode)
 
     filp_close(fp, NULL);
     return 0; // success (file exists)
+}
+
+// Flush file buffer (fflush equivalent in kernel)
+static inline int k_fflush(FILE *fp)
+{
+    // Kernel does not buffer like userspace fflush() does,
+    // but filp_flush() will sync metadata and dirty data.
+    return vfs_fsync(fp, 0);
 }
 
 
