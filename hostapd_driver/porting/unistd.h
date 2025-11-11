@@ -109,5 +109,11 @@ static inline int unsetenv(const char *name)
     return 0;
 }
 
+static inline int fork(void)
+{
+    printk(KERN_ERR "fork() not supported in kernel\n");
+    return -1;
+}
+
 
 #endif
