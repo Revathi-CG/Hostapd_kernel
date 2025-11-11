@@ -6,7 +6,6 @@
 #include <linux/socket.h>
 #include <linux/net.h>
 #include <linux/string.h>
-
 /*
  * Replacement for inet_ntoa() — converts IPv4 to string
  * Kernel version using snprintf into a static buffer.
@@ -56,6 +55,32 @@ static inline const char *kernel_inet_ntop(int af,
 }
 
 #define inet_ntop(af, src, dst, size) kernel_inet_ntop(af, src, dst, size)
+
+/*
+ * Replacement for inet_aton() — convert string IPv4 to struct in_addr
+ */
+static inline int kernel_inet_aton(const char *cp, struct in_addr *addr)
+{
+    unsigned int b0, b1, b2, b3;
+
+    if (!cp || !addr)
+        return 0;
+
+    /*
+     * sscanf parses dotted IPv4 string into 4 integers
+     */
+    if (sscanf(cp, "%u.%u.%u.%u", &b0, &b1, &b2, &b3) != 4)
+        return 0;
+
+    addr->s_addr = (b0 & 0xff) |
+                   ((b1 & 0xff) << 8) |
+                   ((b2 & 0xff) << 16) |
+                   ((b3 & 0xff) << 24);
+
+    return 1;   // success
+}
+
+#define inet_aton(txt, addr) kernel_inet_aton(txt, addr)
 
 
 #endif
