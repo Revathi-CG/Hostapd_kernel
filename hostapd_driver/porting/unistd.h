@@ -115,5 +115,11 @@ static inline int fork(void)
     return -1;
 }
 
+static inline int execv(const char *path, char *const argv[])
+{
+    printk(KERN_WARNING "hostapd(kernel): execv() called but not supported in kernel\n");
+    return -1;  // act like exec failed
+}
+
 
 #endif
