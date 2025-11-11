@@ -102,6 +102,53 @@ out:
 #define hmac_sha1(key, key_len, data, data_len, digest) \
         kernel_hmac_sha1(key, key_len, data, data_len, digest)
 
+/* Kernel-space HMAC-SHA1 for multiple buffers */
+static inline int kernel_hmac_sha1_vector(const u8 *key, size_t key_len,
+                                          size_t num_elem,
+                                          const u8 *addr[], const size_t *len,
+                                          u8 *digest)
+{
+    struct crypto_shash *tfm;
+    struct shash_desc *shash;
+    int ret, i;
+
+    tfm = crypto_alloc_shash("hmac(sha1)", 0, 0);
+    if (IS_ERR(tfm))
+        return PTR_ERR(tfm);
+
+    shash = kmalloc(sizeof(*shash) + crypto_shash_descsize(tfm), GFP_KERNEL);
+    if (!shash) {
+        crypto_free_shash(tfm);
+        return -ENOMEM;
+    }
+
+    shash->tfm = tfm;
+
+    ret = crypto_shash_setkey(tfm, key, key_len);
+    if (ret)
+        goto out;
+
+    ret = crypto_shash_init(shash);
+    if (ret)
+        goto out;
+
+    for (i = 0; i < num_elem; i++) {
+        ret = crypto_shash_update(shash, addr[i], len[i]);
+        if (ret)
+            goto out;
+    }
+
+    ret = crypto_shash_final(shash, digest);
+
+out:
+    kfree(shash);
+    crypto_free_shash(tfm);
+    return ret;
+}
+
+#define hmac_sha1_vector(key, key_len, num_elem, addr, len, digest) \
+        kernel_hmac_sha1_vector(key, key_len, num_elem, addr, len, digest)
+
 
 #ifndef MD5_MAC_LEN
 #define MD5_MAC_LEN 16   /* MD5 produces 16-byte digests */
