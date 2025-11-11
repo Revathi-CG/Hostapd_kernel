@@ -6,6 +6,8 @@
 #include <linux/socket.h>
 #include <linux/net.h>
 #include <linux/string.h>
+#include <linux/inet.h>   // <-- this one declares in6_pton()
+
 /*
  * Replacement for inet_ntoa() — converts IPv4 to string
  * Kernel version using snprintf into a static buffer.
@@ -81,6 +83,31 @@ static inline int kernel_inet_aton(const char *cp, struct in_addr *addr)
 }
 
 #define inet_aton(txt, addr) kernel_inet_aton(txt, addr)
+
+#include <linux/in6.h>
+
+/*
+ * Replacement for inet_pton() supporting IPv4 and IPv6
+ */
+static inline int kernel_inet_pton(int af, const char *src, void *dst)
+{
+    if (!src || !dst)
+        return -1;
+
+    if (af == AF_INET) {
+               struct in_addr *addr4 = (struct in_addr *)dst;
+	    return kernel_inet_aton(src, addr4);  // reuse earlier implementation
+    }
+
+    if (af == AF_INET6) {
+        /* Kernel native IPv6 parser */
+    	    return in6_pton(src, strlen(src), dst, '\0', NULL) ? 1 : 0;
+    }
+
+    return -1;
+}
+
+#define inet_pton(af, src, dst) kernel_inet_pton(af, src, dst)
 
 
 #endif
