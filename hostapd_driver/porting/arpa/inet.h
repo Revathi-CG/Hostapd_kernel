@@ -28,5 +28,34 @@ static inline char *kernel_inet_ntoa(struct in_addr in)
  */
 #define inet_ntoa(a) kernel_inet_ntoa(a)
 
+/*
+ * Replacement for inet_ntop() — IPv4 + IPv6 support
+ */
+static inline const char *kernel_inet_ntop(int af,
+                                           const void *src,
+                                           char *dst,
+                                           size_t size)
+{
+    if (!dst || size == 0)
+        return NULL;
+
+    if (af == AF_INET) {
+        const unsigned char *bytes = src;
+        snprintf(dst, size, "%u.%u.%u.%u",
+                 bytes[0], bytes[1], bytes[2], bytes[3]);
+        return dst;
+    }
+    else if (af == AF_INET6) {
+        const struct in6_addr *addr6 = src;
+        snprintf(dst, size,
+                 "%pI6", addr6);     // kernel format for IPv6
+        return dst;
+    }
+
+    return NULL;
+}
+
+#define inet_ntop(af, src, dst, size) kernel_inet_ntop(af, src, dst, size)
+
 
 #endif
