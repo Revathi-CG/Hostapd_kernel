@@ -13,6 +13,7 @@
 #define fopen(path, mode)        k_fopen(path, mode)
 #define fgets(buf, size, fp)     k_fgets(buf, size, fp)
 #define fclose(fp)               k_fclose(fp)
+#define access k_access
 
 // fopen → kernel file open
 static inline FILE *k_fopen(const char *path, const char *mode)
@@ -78,6 +79,17 @@ static inline int k_fseek(FILE *fp, loff_t offset, int whence)
 static inline long k_ftell(FILE *fp)
 {
     return fp->f_pos;
+}
+
+// access() → check if file exists
+static inline int k_access(const char *path, int mode)
+{
+    struct file *fp = filp_open(path, O_RDONLY, 0);
+    if (IS_ERR(fp))
+        return -ENOENT;
+
+    filp_close(fp, NULL);
+    return 0; // success (file exists)
 }
 
 
