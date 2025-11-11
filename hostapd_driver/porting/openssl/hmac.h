@@ -103,5 +103,13 @@ out:
         kernel_hmac_sha1(key, key_len, data, data_len, digest)
 
 
+#ifndef MD5_MAC_LEN
+#define MD5_MAC_LEN 16   /* MD5 produces 16-byte digests */
+#endif
+
+#ifndef SHA1_MAC_LEN
+#define SHA1_MAC_LEN 20  /* SHA1 produces 20-byte digests */
+#endif
+
 
 #endif /* __HMAC_H_ */
