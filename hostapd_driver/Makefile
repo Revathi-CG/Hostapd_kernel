@@ -37,17 +37,9 @@ hostapd_driver-objs := 	hostapd-2.11/hostapd/main.o \
 	hostapd-2.11/hostapd/../src/common/hw_features_common.o \
 	hostapd-2.11/hostapd/../src/eapol_auth/eapol_auth_sm.o \
 	hostapd-2.11/hostapd/../src/eapol_auth/eapol_auth_dump.o \
-	hostapd-2.11/hostapd/../src/radius/radius.o \
-	hostapd-2.11/hostapd/../src/radius/radius_client.o \
-	hostapd-2.11/hostapd/../src/radius/radius_das.o \
-	hostapd-2.11/hostapd/../src/ap/accounting.o \
-	hostapd-2.11/hostapd/../src/ap/vlan_init.o \
-	hostapd-2.11/hostapd/../src/ap/vlan_ifconfig.o \
-	hostapd-2.11/hostapd/../src/ap/vlan.o \
 	hostapd-2.11/hostapd/../src/common/ctrl_iface_common.o \
 	hostapd-2.11/hostapd/ctrl_iface.o \
 	hostapd-2.11/hostapd/../src/ap/ctrl_iface_ap.o \
-	hostapd-2.11/hostapd/../src/drivers/driver_hostap.o \
 	hostapd-2.11/hostapd/../src/drivers/driver_nl80211.o \
 	hostapd-2.11/hostapd/../src/drivers/driver_nl80211_capa.o \
 	hostapd-2.11/hostapd/../src/drivers/driver_nl80211_event.o \
@@ -57,49 +49,18 @@ hostapd_driver-objs := 	hostapd-2.11/hostapd/main.o \
 	hostapd-2.11/hostapd/../src/drivers/rfkill.o \
 	hostapd-2.11/hostapd/../src/utils/radiotap.o \
 	hostapd-2.11/hostapd/../src/drivers/linux_ioctl.o \
-	hostapd-2.11/hostapd/../src/l2_packet/l2_packet_linux.o \
-	hostapd-2.11/hostapd/../src/eap_server/eap_server_md5.o \
-	hostapd-2.11/hostapd/../src/eap_server/eap_server_tls.o \
-	hostapd-2.11/hostapd/../src/eap_server/eap_server_peap.o \
-	hostapd-2.11/hostapd/../src/eap_common/eap_peap_common.o \
-	hostapd-2.11/hostapd/../src/eap_server/eap_server_ttls.o \
-	hostapd-2.11/hostapd/../src/eap_server/eap_server_mschapv2.o \
-	hostapd-2.11/hostapd/../src/eap_server/eap_server_gtc.o \
-	hostapd-2.11/hostapd/../src/common/dpp.o \
-	hostapd-2.11/hostapd/../src/common/dpp_auth.o \
-	hostapd-2.11/hostapd/../src/common/dpp_backup.o \
-	hostapd-2.11/hostapd/../src/common/dpp_crypto.o \
-	hostapd-2.11/hostapd/../src/common/dpp_pkex.o \
-	hostapd-2.11/hostapd/../src/common/dpp_reconfig.o \
-	hostapd-2.11/hostapd/../src/common/dpp_tcp.o \
-	hostapd-2.11/hostapd/../src/ap/dpp_hostapd.o \
-	hostapd-2.11/hostapd/../src/ap/gas_query_ap.o \
+	hostapd-2.11/hostapd/../src/l2_packet/l2_packet_none.o \
 	hostapd-2.11/hostapd/eap_register.o \
 	hostapd-2.11/hostapd/../src/eap_server/eap_server.o \
 	hostapd-2.11/hostapd/../src/eap_common/eap_common.o \
 	hostapd-2.11/hostapd/../src/eap_server/eap_server_methods.o \
 	hostapd-2.11/hostapd/../src/eap_server/eap_server_identity.o \
-	hostapd-2.11/hostapd/../src/crypto/ms_funcs.o \
-	hostapd-2.11/hostapd/../src/eap_common/chap.o \
-	hostapd-2.11/hostapd/../src/eap_server/eap_server_tls_common.o \
-	hostapd-2.11/hostapd/../src/crypto/tls_openssl.o \
-	hostapd-2.11/hostapd/../src/crypto/tls_openssl_ocsp.o \
 	hostapd-2.11/hostapd/../src/crypto/crypto_openssl.o \
-	hostapd-2.11/hostapd/../src/crypto/aes-siv.o \
-	hostapd-2.11/hostapd/../src/crypto/aes-ctr.o \
+	hostapd-2.11/hostapd/../src/crypto/tls_none.o \
 	hostapd-2.11/hostapd/../src/crypto/sha1-prf.o \
-	hostapd-2.11/hostapd/../src/crypto/sha1-tlsprf.o \
 	hostapd-2.11/hostapd/../src/crypto/sha256-prf.o \
 	hostapd-2.11/hostapd/../src/crypto/sha256-tlsprf.o \
-	hostapd-2.11/hostapd/../src/crypto/sha256-kdf.o \
-	hostapd-2.11/hostapd/../src/crypto/sha384-kdf.o \
-	hostapd-2.11/hostapd/../src/crypto/sha512-kdf.o \
-	hostapd-2.11/hostapd/../src/crypto/sha384-prf.o \
-	hostapd-2.11/hostapd/../src/crypto/sha512-prf.o \
-	hostapd-2.11/hostapd/../src/tls/asn1.o \
 	hostapd-2.11/hostapd/../src/crypto/random.o \
-	hostapd-2.11/hostapd/../src/utils/base64.o \
-	hostapd-2.11/hostapd/../src/utils/json.o \
 	hostapd-2.11/hostapd/../src/ap/wmm.o \
 	hostapd-2.11/hostapd/../src/ap/ap_list.o \
 	hostapd-2.11/hostapd/../src/ap/comeback_token.o \
@@ -109,13 +70,7 @@ hostapd_driver-objs := 	hostapd-2.11/hostapd/main.o \
 	hostapd-2.11/hostapd/../src/ap/hw_features.o \
 	hostapd-2.11/hostapd/../src/ap/dfs.o \
 	hostapd-2.11/hostapd/../src/ap/ieee802_11_ht.o \
-	hostapd-2.11/hostapd/../src/common/gas.o \
-	hostapd-2.11/hostapd/../src/ap/gas_serv.o \
 	hostapd-2.11/hostapd/../src/drivers/driver_common.o \
-	hostapd-2.11/hostapd/hostapd_cli.o \
-	hostapd-2.11/hostapd/../src/common/wpa_ctrl.o \
-	hostapd-2.11/hostapd/../src/common/cli.o \
-	hostapd-2.11/hostapd/../src/utils/edit_simple.o
 
 ccflags-y += -I./porting -include porting/includes.h
 EXTRA_CFLAGS += -include $(PWD)/hostapd-2.11/src/utils/common.h
