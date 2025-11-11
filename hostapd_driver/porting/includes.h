@@ -1,6 +1,7 @@
 #ifndef __PORTING_INCLUDES_H_
 #define __PORTING_INCLUDES_H_
 
+
 /*
 	 * Ensure networking address structs (in_addr, in6_addr) exist before hostapd uses them.
 	 * Required when building hostapd in kernel space.
@@ -35,6 +36,8 @@
 #include "sha1_prf_fix.h"
 #include "byteswap.h"
 #include "signal.h"
+#include "openssl/hmac.h"
+#include "linux/types.h"
 
 // Replace atoi() with kstrtoint() for kernel environment
 #include <linux/kernel.h>    // kstrtoint()
