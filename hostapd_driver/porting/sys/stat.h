@@ -54,4 +54,42 @@ static inline int kernel_chmod(const char *filename, umode_t mode)
 #define chmod(filename, mode) kernel_chmod(filename, mode)
 
 
+/*
+ * Kernel-space replacement for rmdir()
+ */
+static inline int kernel_rmdir(const char *pathname)
+{
+    struct path parent_path;
+    struct dentry *dentry;
+    const char *basename;
+    int ret;
+
+    // Lookup the path
+    ret = kern_path(pathname, LOOKUP_PARENT, &parent_path);
+    if (ret)
+        return ret;
+
+        // Extract final component name
+    basename = kbasename(pathname);
+
+    // Lookup the dentry
+    dentry = lookup_one_len(basename, parent_path.dentry, strlen(basename));
+    if (IS_ERR(dentry)) {
+        path_put(&parent_path);
+        return PTR_ERR(dentry);
+    }
+
+    // Call kernel VFS remove
+    ret = vfs_rmdir(mnt_idmap(parent_path.mnt), d_inode(parent_path.dentry), dentry);
+
+    dput(dentry);
+    path_put(&parent_path);
+
+    return ret;
+}
+
+/* Redirect libc rmdir() to kernel_rmdir() */
+#define rmdir(path) kernel_rmdir(path)
+
+
 #endif /* __STAT_H_ */
