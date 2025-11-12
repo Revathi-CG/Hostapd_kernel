@@ -102,4 +102,26 @@ static inline int kernel_socket(int family, int type, int protocol)
  * That’s why this trick works cleanly.
  */
 
+/*
+ * Kernel-space replacement for bind()
+ * Works on sockets created via kernel_socket() wrapper.
+ */
+static inline int kernel_bind_wrapper(int sock_fd, struct sockaddr *uaddr, int addrlen)
+{
+    struct socket *sock = (struct socket *)(long)sock_fd;
+    struct sockaddr_storage kaddr;
+
+    if (!sock || !uaddr)
+        return -EINVAL;
+
+    /* Copy user address to kernel memory */
+    memset(&kaddr, 0, sizeof(kaddr));
+    memcpy(&kaddr, uaddr, addrlen);
+
+    return kernel_bind(sock, (struct sockaddr *)&kaddr, addrlen);
+}
+
+/* Redirect all user-space bind() calls */
+#define bind(fd, addr, len) kernel_bind_wrapper(fd, addr, len)
+
 #endif
