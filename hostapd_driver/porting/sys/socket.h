@@ -124,4 +124,33 @@ static inline int kernel_bind_wrapper(int sock_fd, struct sockaddr *uaddr, int a
 /* Redirect all user-space bind() calls */
 #define bind(fd, addr, len) kernel_bind_wrapper(fd, addr, len)
 
+/*
+ * Kernel-space safe wrapper for user-space connect()
+ * Uses kernel_connect() internally.
+ */
+static inline int kernel_connect_wrapper(int sock_fd, struct sockaddr *uaddr, int addrlen)
+{
+    struct socket *sock;
+    struct sockaddr_storage kaddr;
+    int ret;
+
+    // Convert user-space fd to kernel socket
+    sock = sockfd_lookup(sock_fd, &ret);
+    if (!sock)
+        return ret;
+
+    memset(&kaddr, 0, sizeof(kaddr));
+    memcpy(&kaddr, uaddr, addrlen);
+
+    // Use real kernel_connect()
+    ret = kernel_connect(sock, (struct sockaddr *)&kaddr, addrlen, 0);
+
+    sockfd_put(sock);
+    return ret;
+}
+
+/* Redirect all user-space connect() calls */
+#define connect(fd, addr, len) kernel_connect_wrapper(fd, addr, len)
+
+
 #endif
