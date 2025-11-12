@@ -72,5 +72,34 @@ static inline int kernel_sendto(int sockfd, const void *buf, size_t len, int fla
 
 #define sendto kernel_sendto
 
+/*
+ * Kernel-space replacement for socket()
+ * Returns a fake integer FD (pointer cast) for hostapd compatibility.
+ */
+static inline int kernel_socket(int family, int type, int protocol)
+{
+    struct socket *sock;
+    int ret;
+
+    ret = sock_create(family, type, protocol, &sock);
+    if (ret < 0)
+        return ret;
+
+    /*
+     * In kernel there are no file descriptors, only struct socket*.
+     * We cast it to int so hostapd's code compiles and passes it around,
+     * then our wrappers (sendto/recvfrom/close) will convert it back.
+     */
+    return (int)(long)sock;
+}
+
+/* Redirect all user-space socket() calls */
+#define socket(family, type, protocol) kernel_socket(family, type, protocol)
+
+/*
+ * Ensure your existing kernel_sendto() and kernel_recvfrom() wrappers
+ * use sockfd_lookup() to convert this casted int back into struct socket *.
+ * That’s why this trick works cleanly.
+ */
 
 #endif
