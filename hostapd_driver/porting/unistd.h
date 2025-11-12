@@ -121,5 +121,19 @@ static inline int execv(const char *path, char *const argv[])
     return -1;  // act like exec failed
 }
 
+/*
+ * Kernel-space stub for lchown()
+ * In kernel, file ownership management is not available to modules directly.
+ * So, we stub it to return success (0) to satisfy hostapd build.
+ */
+static inline int kernel_lchown(const char *path, uid_t owner, gid_t group)
+{
+    printk(KERN_WARNING "hostapd(kernel): lchown() called on '%s', ignored\n", path);
+    return 0;  // pretend success
+}
+
+/* Redirect lchown() to our stub */
+#define lchown(path, owner, group) kernel_lchown(path, owner, group)
+
 
 #endif
