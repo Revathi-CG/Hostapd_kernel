@@ -43,4 +43,34 @@ static inline int kernel_recvfrom(int sockfd, void *buf, size_t len, int flags,
 // Replace all user-space recvfrom calls
 #define recvfrom kernel_recvfrom
 
+// porting/sys/socket.h
+
+static inline int kernel_sendto(int sockfd, const void *buf, size_t len, int flags,
+                                struct sockaddr *addr, int addr_len)
+{
+    struct socket *sock;
+    struct msghdr msg;
+    struct kvec iov;
+    int ret;
+
+    sock = sockfd_lookup(sockfd, &ret);
+    if (!sock)
+        return ret;
+
+    memset(&msg, 0, sizeof(msg));
+    msg.msg_name = addr;
+    msg.msg_namelen = addr_len;
+
+    iov.iov_base = (void *)buf;
+    iov.iov_len = len;
+
+    ret = kernel_sendmsg(sock, &msg, &iov, 1, len);
+
+    sockfd_put(sock);
+    return ret;
+}
+
+#define sendto kernel_sendto
+
+
 #endif
