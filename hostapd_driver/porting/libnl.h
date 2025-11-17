@@ -16,4 +16,10 @@ static inline void nl_socket_free(struct nl_sock *sock)
 {
 }
 
+static inline int genl_connect(struct nl_sock *sock)
+{
+    return 0;  // dummy stub for kernel-space compilation
+}
+
+
 #endif
