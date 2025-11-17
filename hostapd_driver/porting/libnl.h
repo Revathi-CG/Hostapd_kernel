@@ -32,5 +32,15 @@ static inline const char *nl_geterror(int err)
     return "libnl disabled";  // dummy message for kernel-space build
 }
 
+static inline void nl_socket_set_nonblocking(struct nl_sock *sock)
+{
+    // no-op stub for kernel-space build with nl80211 disabled
+}
+
+static inline int nl_socket_get_fd(struct nl_sock *sock)
+{
+    return -1; /* dummy fd, never actually used */
+}
+
 
 #endif
