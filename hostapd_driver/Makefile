@@ -102,6 +102,32 @@ ccflags-y += -Wno-overflow -Wno-sign-conversion
 ccflags-y += -Wno-format -Wno-format-extra-args
 ccflags-y += -Wno-undef
 
+ccflags-y += -DCONFIG_NO_VLAN
+ccflags-y += -DCONFIG_NO_RADIUS
+ccflags-y += -DNEED_AP_MLME
+ccflags-y += -DHOSTAPD
+ccflags-y += -DCRYPTO_RSA_OAEP_SHA256
+ccflags-y += -DCONFIG_FIPS
+ccflags-y += -DCONFIG_NO_RC4
+ccflags-y += -DCONFIG_SHA256
+ccflags-y += -DETH_P_PREAUTH
+ccflags-y += -DCONFIG_DRIVER_NL80211
+ccflags-y += -DCONFIG_ELOOP_SELECT
+ccflags-y += -DANDROID_LOG_NAME
+ccflags-y += -DLOG_HOSTAPD
+ccflags-y += -D_WIN32
+ccflags-y += -D_POSIX_C_SOURCE
+ccflags-y += -DCLOCK_BOOTTIME
+ccflags-y += -DCLOCK_MONOTONIC
+ccflags-y += -DCONFIG_CTRL_IFACE_UNIX
+ccflags-y += -DHOSTAPD_DUMP_STATE
+ccflags-y += -DNETLINK_CAP_ACK
+ccflags-y += -DNETLINK_EXT_ACK
+ccflags-y += -DNLM_F_CAPPED
+ccflags-y += -DNLM_F_ACK_TLVS
+ccflags-y += -DSOL_NETLINK
+ccflags-y += -DANDROID_LIB_STUB
+ccflags-y += -DEAP_SERVER_IDENTITY
 
 
 all:

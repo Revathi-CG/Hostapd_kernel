@@ -1,14 +1,45 @@
 #ifndef __PORTING_INCLUDES_H_
 #define __PORTING_INCLUDES_H_
 
+//redefinition warnings after editing Makefile
+/* Prevent redefinition warnings for macros already defined by -D in Makefile */
+#ifdef CLOCK_BOOTTIME
+#undef CLOCK_BOOTTIME
+#endif
+
+#ifdef SOL_NETLINK
+#undef SOL_NETLINK
+#endif
+
+#ifdef ETH_P_PREAUTH
+#undef ETH_P_PREAUTH
+#endif
+
+#ifdef NLM_F_CAPPED
+#undef NLM_F_CAPPED
+#endif
+
+#ifdef NLM_F_ACK_TLVS
+#undef NLM_F_ACK_TLVS
+#endif
+
+#ifdef NETLINK_CAP_ACK
+#undef NETLINK_CAP_ACK
+#endif
+
+#ifdef NETLINK_EXT_ACK
+#undef NETLINK_EXT_ACK
+#endif
+#ifdef CONFIG_ELOOP_SELECT
+#undef CONFIG_ELOOP_SELECT
+#endif
 
 /*
 	 * Ensure networking address structs (in_addr, in6_addr) exist before hostapd uses them.
 	 * Required when building hostapd in kernel space.
 	 */
-	#include <linux/in.h>      // struct in_addr
+#include <linux/in.h>      // struct in_addr
 	#include <linux/in6.h>     // struct in6_addr
-
 #define strtol(buf, end, base)    simple_strtol(buf, end, base)
 
 
@@ -24,9 +55,9 @@
 /* This file gets force-included via Makefile to override random_init() */
 #include "random.h"
 #include "errno.h"
+
 #include "stdlib.h"
 #include "time.h"
-
 #include "string.h"
 #include "grp.h"
 #include "common.h"
@@ -38,7 +69,6 @@
 #include "signal.h"
 #include "openssl/hmac.h"
 #include "linux/types.h"
-
 // Replace atoi() with kstrtoint() for kernel environment
 #include <linux/kernel.h>    // kstrtoint()
 
@@ -92,9 +122,9 @@ void qsort(void *base, size_t nmemb, size_t size,
 int pbkdf2_sha1(const char *passphrase, const unsigned char *ssid, size_t ssid_len,
                 int iterations, unsigned char *buf, size_t buflen);
 
+
 #include <linux/ip.h>
 #include <linux/udp.h>
-
 /* Map struct ip → struct iphdr for hostapd */
 #define ip     iphdr
 
