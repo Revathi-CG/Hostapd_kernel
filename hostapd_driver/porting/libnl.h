@@ -2,6 +2,11 @@
 #define __LIBNL_H_
 
 #include <stddef.h>   // <-- Add this
+
+/* Stub constants for nl80211/libnl */
+#define NL_STOP 0
+#define NL_OK   1
+
 static inline struct nl_sock *nl_socket_alloc_cb(void *cb)
 {
     return NULL; /* or allocate dummy struct */
