@@ -34,6 +34,8 @@
 #undef CONFIG_ELOOP_SELECT
 #endif
 
+#include "libnl.h"
+
 /*
 	 * Ensure networking address structs (in_addr, in6_addr) exist before hostapd uses them.
 	 * Required when building hostapd in kernel space.
@@ -51,6 +53,7 @@
 //#define fgets(buf, size, fp)     k_fgets(buf, size, fp)
 //#define fclose(fp)               k_fclose(fp)
 
+#include "sys/socket.h"
 
 /* This file gets force-included via Makefile to override random_init() */
 #include "random.h"
