@@ -21,5 +21,15 @@ static inline int genl_connect(struct nl_sock *sock)
     return 0;  // dummy stub for kernel-space compilation
 }
 
+static inline int nl_socket_set_buffer_size(struct nl_sock *sock,
+                                            int txbuf, int rxbuf)
+{
+    return 0;  // dummy stub for kernel-space compilation
+}
+static inline const char *nl_geterror(int err)
+{
+    return "libnl disabled";  // dummy message for kernel-space build
+}
+
 
 #endif
