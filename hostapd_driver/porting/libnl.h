@@ -26,6 +26,7 @@ static inline int nl_socket_set_buffer_size(struct nl_sock *sock,
 {
     return 0;  // dummy stub for kernel-space compilation
 }
+
 static inline const char *nl_geterror(int err)
 {
     return "libnl disabled";  // dummy message for kernel-space build
