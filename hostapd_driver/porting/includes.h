@@ -49,6 +49,16 @@ ssize_t porting_sendmsg(int sock, struct user_msghdr *msg, int flags);
 
 #include "libnl.h"
 
+#ifdef __KERNEL__
+#include <net/genetlink.h>  // for struct genlmsghdr
+
+#ifndef GENL_HDRLEN
+#define GENL_HDRLEN (sizeof(struct genlmsghdr))
+#endif
+
+#endif
+
+
 /*
 	 * Ensure networking address structs (in_addr, in6_addr) exist before hostapd uses them.
 	 * Required when building hostapd in kernel space.
