@@ -1,7 +1,6 @@
 #ifndef __LIBNL_H_
 #define __LIBNL_H_
 
-#include <linux/netlink.h>
 #include <stddef.h>
 
 /* =====================================
@@ -18,6 +17,11 @@ struct nl_msg {
 #define NL_STOP 0
 #define NL_OK   1
 
+/* If kernel is missing NL_SKIP, define it */
+#ifndef NL_SKIP
+#define NL_SKIP 2
+#endif
+
 static inline struct nl_sock *nl_socket_alloc_cb(void *cb) { return NULL; }
 static inline int nl_connect(struct nl_sock *sock, int protocol) { return 0; }
 static inline void nl_socket_free(struct nl_sock *sock) { }
@@ -32,13 +36,14 @@ static inline int nl_socket_get_fd(struct nl_sock *sock) { return -1; }
  * ===================================== */
 #ifdef __KERNEL__
 
+#include <linux/netlink.h>  // kernel nla_parse and nlmsghdr
 /* Hostapd calls nlmsg_hdr(struct nl_msg*) but kernel
  * nlmsg_hdr expects struct sk_buff*.
  * Provide macro ONLY for struct nl_msg.
  */
 #define nlmsg_hdr(msg)  ((msg)->nlh)
 
-#endif /* __KERNEL__ */
 
+
+#endif
 #endif /* __LIBNL_H_ */
-
