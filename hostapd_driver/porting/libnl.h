@@ -86,4 +86,80 @@ static inline int nl_send_auto_complete(void *handle, void *msg)
 #endif /* __KERNEL__ */
 
 
+/* Dummy nla_parse stub */
+static inline int porting_nla_parse5(struct nlattr *tb[], int maxtype,
+                                     const struct nlattr *head, int len,
+                                     const struct nla_policy *policy)
+{
+    (void)tb; (void)maxtype; (void)head;
+    (void)len; (void)policy;
+    return 0;
+}
+
+static inline void porting_nlmsg_free(struct nl_msg *msg)
+{
+    (void)msg;
+}
+
+/* Redirect hostapd includes to the stub — ONLY for hostapd */
+#ifdef HOSTAPD_BUILD
+#define nlmsg_free(msg) porting_nlmsg_free(msg)
+#define nla_parse(...) porting_nla_parse5(__VA_ARGS__)
+#endif
+
+#ifdef __KERNEL__
+
+/* ===============================
+ * STUBS FOR USERSPACE LIBNL FUNCTIONS
+ * =============================== */
+
+/* nl_cb struct stub */
+struct nl_cb { int dummy; };
+
+/* Stub functions */
+static inline struct nl_cb *nl_socket_get_cb(void *handle) {
+    (void)handle;
+    return (struct nl_cb *)0;
+}
+
+static inline struct nl_cb *nl_cb_clone(struct nl_cb *cb) {
+    (void)cb;
+    return (struct nl_cb *)0;
+}
+
+static inline void nl_cb_put(struct nl_cb *cb) {
+    (void)cb;
+}
+
+static inline void nl_cb_err(struct nl_cb *cb, int type, void *func, void *arg) {
+    (void)cb; (void)type; (void)func; (void)arg;
+}
+
+static inline void nl_cb_set(struct nl_cb *cb, int type, int flags, void *func, void *arg) {
+    (void)cb; (void)type; (void)flags; (void)func; (void)arg;
+}
+
+/* Define missing NL_CB_* macros */
+#ifndef NL_CB_CUSTOM
+#define NL_CB_CUSTOM 0
+#endif
+#ifndef NL_CB_FINISH
+#define NL_CB_FINISH 0
+#endif
+#ifndef NL_CB_ACK
+#define NL_CB_ACK 0
+#endif
+#ifndef NL_CB_VALID
+#define NL_CB_VALID 0
+#endif
+
+/* setsockopt stub for kernel build */
+static inline int setsockopt(int sock, int level, int optname, const void *optval, int optlen) {
+    (void)sock; (void)level; (void)optname; (void)optval; (void)optlen;
+    return 0;
+}
+
+#endif /* __KERNEL__ */
+
+
 #endif /* __LIBNL_H_ */
