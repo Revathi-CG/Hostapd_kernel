@@ -70,5 +70,20 @@ static inline struct nl_msg *nlmsg_alloc(void)
 
 #endif /* __KERNEL__ */
 
+#ifdef __KERNEL__
+
+/* Stub nl_send_auto_complete for hostapd in kernel mode */
+#ifndef HOSTAPD_NL_SEND_AUTO_COMPLETE_DEFINED
+#define HOSTAPD_NL_SEND_AUTO_COMPLETE_DEFINED
+static inline int nl_send_auto_complete(void *handle, void *msg)
+{
+    (void)handle;
+    (void)msg;
+    return 0;  // stub returns 0
+}
+#endif
+
+#endif /* __KERNEL__ */
+
 
 #endif /* __LIBNL_H_ */
