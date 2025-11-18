@@ -259,4 +259,25 @@ static inline int porting_nla_put(struct nl_msg *msg, int attrtype, int len, con
 #define nla_put(msg, attrtype, len, data) porting_nla_put(msg, attrtype, len, data)
 #endif
 
+/* Only for Hostapd internal porting: provide a stub so code compiles */
+/* Stub for genlmsg_put to compile Hostapd against kernel 6.14 */
+static inline void *porting_genlmsg_put(void *msg, u32 portid, u32 seq,
+                                        int nlctrl_id, int unused1, int unused2,
+                                        int cmd, int unused3)
+{
+    (void)msg;
+    (void)portid;
+    (void)seq;
+    (void)nlctrl_id;
+    (void)unused1;
+    (void)unused2;
+    (void)cmd;
+    (void)unused3;
+    return NULL;
+}
+
+/* Redirect genlmsg_put calls to stub */
+#define genlmsg_put porting_genlmsg_put
+
+
 #endif /* __LIBNL_H_ */
