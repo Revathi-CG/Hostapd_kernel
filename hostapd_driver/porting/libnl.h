@@ -135,9 +135,6 @@ static inline void nl_cb_err(struct nl_cb *cb, int type, void *func, void *arg) 
     (void)cb; (void)type; (void)func; (void)arg;
 }
 
-static inline void nl_cb_set(struct nl_cb *cb, int type, int flags, void *func, void *arg) {
-    (void)cb; (void)type; (void)flags; (void)func; (void)arg;
-}
 
 /* Define missing NL_CB_* macros */
 #ifndef NL_CB_CUSTOM
@@ -301,5 +298,22 @@ static inline int nla_put_u64(struct nl_msg *msg, int attrtype, u64 value)
 }
 #endif
 
+/* =====================================
+ * nl_cb stubs
+ * ===================================== */
+#ifndef HAVE_NL_CB_SET
+#define HAVE_NL_CB_SET
+static inline void nl_cb_set(void *cb, int cmd, int type, void *func, void *arg)
+{
+    (void)cb; (void)cmd; (void)type; (void)func; (void)arg;
+}
+#endif
+/* Remove this block entirely */
+#if 0
+#ifndef HAVE_NLA_POLICY
+#define HAVE_NLA_POLICY
+struct nla_policy { int type; };
+#endif
+#endif
 
 #endif /* __LIBNL_H_ */
