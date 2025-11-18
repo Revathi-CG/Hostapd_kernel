@@ -10,6 +10,7 @@
 #endif
 
 
+
 /* =====================================
  * Basic stubs
  * ===================================== */
@@ -53,4 +54,21 @@ static inline int nl_socket_get_fd(struct nl_sock *sock) { return -1; }
 
 
 #endif
+
+#ifdef __KERNEL__
+
+#include <linux/netlink.h>
+
+/* Stub for nlmsg_alloc to avoid implicit declaration in kernel space */
+#ifndef HOSTAPD_NLMSG_ALLOC_STUB
+#define HOSTAPD_NLMSG_ALLOC_STUB
+static inline struct nl_msg *nlmsg_alloc(void)
+{
+    return NULL;  /* return NULL to satisfy compiler; not actually used in kernel build */
+}
+#endif
+
+#endif /* __KERNEL__ */
+
+
 #endif /* __LIBNL_H_ */
