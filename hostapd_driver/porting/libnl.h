@@ -161,5 +161,21 @@ static inline int setsockopt(int sock, int level, int optname, const void *optva
 
 #endif /* __KERNEL__ */
 
+#ifdef __KERNEL__
+static inline int hostapd_nl_recvmsgs_stub(void *nl_handle, void *cb)
+{
+    (void)nl_handle;
+    (void)cb;
+    return 0;
+}
+#define nl_recvmsgs hostapd_nl_recvmsgs_stub
+#endif
+
+#ifdef __KERNEL__
+#ifndef NLE_DUMP_INTR
+#define NLE_DUMP_INTR NLM_F_DUMP_INTR
+#endif
+#endif
+
 
 #endif /* __LIBNL_H_ */
