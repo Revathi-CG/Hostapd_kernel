@@ -34,6 +34,19 @@
 #undef CONFIG_ELOOP_SELECT
 #endif
 
+#pragma once
+#include <linux/socket.h>   // MUST come first so struct msghdr is defined
+#include <linux/uio.h>      // struct iovec
+#include <linux/types.h>    // size_t, __user
+#include <linux/in.h>
+#include <linux/in6.h>
+#include "porting_msghdr.h"
+
+#undef sendmsg
+#define sendmsg    porting_sendmsg
+#define recvmsg    porting_recvmsg
+ssize_t porting_sendmsg(int sock, struct user_msghdr *msg, int flags);
+
 #include "libnl.h"
 
 /*
