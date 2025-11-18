@@ -279,5 +279,18 @@ static inline void *porting_genlmsg_put(void *msg, u32 portid, u32 seq,
 /* Redirect genlmsg_put calls to stub */
 #define genlmsg_put porting_genlmsg_put
 
+/* porting stubs for kernel builds */
+#ifndef nla_put_string
+static inline int porting_nla_put_string(struct nl_msg *msg, int attrtype, const char *s)
+{
+    (void)msg;       /* ignore struct nl_msg */
+    (void)attrtype;  /* ignore attribute type */
+    (void)s;         /* ignore string */
+    return 0;        /* pretend success */
+}
+
+#define nla_put_string porting_nla_put_string
+#endif
+
 
 #endif /* __LIBNL_H_ */
