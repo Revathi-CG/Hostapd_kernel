@@ -1,6 +1,8 @@
 #ifndef __LIBNL_H_
 #define __LIBNL_H_
 
+#include <net/genetlink.h>
+
 #include <stddef.h>
 
 #ifdef __KERNEL__
@@ -180,21 +182,41 @@ static inline int hostapd_nl_recvmsgs_stub(void *nl_handle, void *cb)
 #include <linux/netlink.h>
 #include <linux/errno.h>
 #include <net/netlink.h>
+#include <net/genetlink.h>
 
 #endif
 
 
 /* porting stubs only if kernel version does not define them */
 #ifndef nla_parse
-static inline int porting_nla_parse(struct nlattr *tb[], int maxtype,
-                                    const struct nlattr *head, int len,
-                                    const struct nla_policy *policy)
+#include <net/genetlink.h>
+static inline void *genlmsg_attrdata(const void *nlh, int attroffset)
 {
-    (void)tb; (void)maxtype; (void)head; (void)len;
-    (void)policy;
+    (void)nlh;
+    (void)attroffset;
+    return NULL;
+}
+
+static inline int genlmsg_attrlen(const void *nlh, int attroffset)
+{
+    (void)nlh;
+    (void)attroffset;
     return 0;
 }
-#define nla_parse(...) porting_nla_parse(__VA_ARGS__)
+
+static inline int porting_nla_parse(struct nlattr *tb[], int maxtype,
+                                    const struct nlattr *head, int len,
+                                    const struct nla_policy *policy,
+                                    struct netlink_ext_ack *extack)
+{
+    (void)tb; (void)maxtype; (void)head; (void)len;
+    (void)policy; (void)extack;
+    return 0;
+}
+
+/* Wrapper macro to allow 5 or 6 args */
+#define nla_parse(...) porting_nla_parse(__VA_ARGS__, NULL)
+
 #endif
 
 #ifndef nlmsg_free

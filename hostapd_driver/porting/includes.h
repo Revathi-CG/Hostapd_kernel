@@ -47,6 +47,8 @@
 #define recvmsg    porting_recvmsg
 ssize_t porting_sendmsg(int sock, struct user_msghdr *msg, int flags);
 
+#include <net/genetlink.h>
+
 #include "libnl.h"
 
 #ifdef __KERNEL__
