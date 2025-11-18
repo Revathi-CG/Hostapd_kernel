@@ -34,6 +34,9 @@
 #undef CONFIG_ELOOP_SELECT
 #endif
 
+#include "libnl.h"
+
+
 #pragma once
 #include <linux/socket.h>   // MUST come first so struct msghdr is defined
 #include <linux/uio.h>      // struct iovec
@@ -49,7 +52,9 @@ ssize_t porting_sendmsg(int sock, struct user_msghdr *msg, int flags);
 
 #include <net/genetlink.h>
 
-#include "libnl.h"
+
+
+
 
 #ifdef __KERNEL__
 #include <net/genetlink.h>  // for struct genlmsghdr

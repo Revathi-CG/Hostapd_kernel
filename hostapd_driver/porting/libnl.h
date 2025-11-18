@@ -18,7 +18,8 @@
  * ===================================== */
 struct nl_sock;
 struct nlattr;
-struct nla_policy;
+
+
 struct netlink_ext_ack;
 /* Fake nl_msg (always defined) */
 struct nl_msg {
@@ -200,7 +201,7 @@ static inline int genlmsg_attrlen(const void *nlh, int attroffset)
     (void)attroffset;
     return 0;
 }
-
+/*
 static inline int porting_nla_parse(struct nlattr *tb[], int maxtype,
                                     const struct nlattr *head, int len,
                                     const struct nla_policy *policy,
@@ -210,7 +211,7 @@ static inline int porting_nla_parse(struct nlattr *tb[], int maxtype,
     (void)policy; (void)extack;
     return 0;
 }
-
+*/
 /* Wrapper macro to allow 5 or 6 args */
 #define nla_parse(...) porting_nla_parse(__VA_ARGS__, NULL)
 
@@ -308,14 +309,6 @@ static inline void nl_cb_set(void *cb, int cmd, int type, void *func, void *arg)
     (void)cb; (void)cmd; (void)type; (void)func; (void)arg;
 }
 #endif
-/* Remove this block entirely */
-#if 0
-#ifndef HAVE_NLA_POLICY
-#define HAVE_NLA_POLICY
-struct nla_policy { int type; };
-#endif
-#endif
-
 #ifdef __KERNEL__
 // Stub for nl_cb_alloc
 #ifndef HOSTAPD_NL_CB_ALLOC_STUB
@@ -347,6 +340,44 @@ static inline void *nl_cb_alloc(int type)
 #endif
 #endif
 #endif
+
+#ifdef __KERNEL__
+#ifndef HAVE_HOSTAPD_NLA_POLICY
+#define HAVE_HOSTAPD_NLA_POLICY
+
+#include <linux/types.h>
+#include <net/netlink.h>   // for existing NLA_* constants
+
+/* Minimal struct to satisfy hostapd */
+struct hostapd_nla_policy {
+    u8 type;    /* use kernel's NLA_* constants */
+    u16 minlen;
+    u16 maxlen;
+};
+
+#endif /* HAVE_HOSTAPD_NLA_POLICY */
+
+/* Map hostapd’s nla_policy to our kernel stub */
+#define nla_policy hostapd_nla_policy
+
+/* Forward declarations */
+struct nlattr;
+struct netlink_ext_ack;
+
+/* Stub for nla_parse / nla_parse_nested */
+static inline int porting_nla_parse(struct nlattr *tb[], int maxtype,
+                                    const struct nlattr *head, int len,
+                                    const struct hostapd_nla_policy *policy,
+                                    struct netlink_ext_ack *extack)
+{
+    (void)tb; (void)maxtype; (void)head;
+    (void)len; (void)policy; (void)extack;
+    return 0;
+}
+
+#define nla_parse(...) porting_nla_parse(__VA_ARGS__, NULL)
+
+#endif /* __KERNEL__ */
 
 
 #endif /* __LIBNL_H_ */
