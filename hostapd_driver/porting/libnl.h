@@ -15,7 +15,9 @@
  * Basic stubs
  * ===================================== */
 struct nl_sock;
-
+struct nlattr;
+struct nla_policy;
+struct netlink_ext_ack;
 /* Fake nl_msg (always defined) */
 struct nl_msg {
     struct nlmsghdr *nlh;
@@ -96,10 +98,6 @@ static inline int porting_nla_parse5(struct nlattr *tb[], int maxtype,
     return 0;
 }
 
-static inline void porting_nlmsg_free(struct nl_msg *msg)
-{
-    (void)msg;
-}
 
 /* Redirect hostapd includes to the stub — ONLY for hostapd */
 #ifdef HOSTAPD_BUILD
@@ -177,5 +175,66 @@ static inline int hostapd_nl_recvmsgs_stub(void *nl_handle, void *cb)
 #endif
 #endif
 
+#ifdef __KERNEL__
+
+#include <linux/netlink.h>
+#include <linux/errno.h>
+#include <net/netlink.h>
+
+#endif
+
+
+/* porting stubs only if kernel version does not define them */
+#ifndef nla_parse
+static inline int porting_nla_parse(struct nlattr *tb[], int maxtype,
+                                    const struct nlattr *head, int len,
+                                    const struct nla_policy *policy)
+{
+    (void)tb; (void)maxtype; (void)head; (void)len;
+    (void)policy;
+    return 0;
+}
+#define nla_parse(...) porting_nla_parse(__VA_ARGS__)
+#endif
+
+#ifndef nlmsg_free
+static inline void porting_nlmsg_free(struct nl_msg *msg)
+{
+    (void)msg;
+}
+#define nlmsg_free(msg) porting_nlmsg_free(msg)
+#endif
+
+#ifndef nla_put_flag
+static inline int porting_nla_put_flag(struct nl_msg *msg, int attrtype)
+{
+    (void)msg; (void)attrtype; return 0;
+}
+#define nla_put_flag(msg, attrtype) porting_nla_put_flag(msg, attrtype)
+#endif
+
+#ifndef nla_put_u16
+static inline int porting_nla_put_u16(struct nl_msg *msg, int attrtype, unsigned short val)
+{
+    (void)msg; (void)attrtype; (void)val; return 0;
+}
+#define nla_put_u16(msg, attrtype, val) porting_nla_put_u16(msg, attrtype, val)
+#endif
+
+#ifndef nla_put_u32
+static inline int porting_nla_put_u32(struct nl_msg *msg, int attrtype, unsigned int val)
+{
+    (void)msg; (void)attrtype; (void)val; return 0;
+}
+#define nla_put_u32(msg, attrtype, val) porting_nla_put_u32(msg, attrtype, val)
+#endif
+
+#ifndef nla_put
+static inline int porting_nla_put(struct nl_msg *msg, int attrtype, int len, const void *data)
+{
+    (void)msg; (void)attrtype; (void)len; (void)data; return 0;
+}
+#define nla_put(msg, attrtype, len, data) porting_nla_put(msg, attrtype, len, data)
+#endif
 
 #endif /* __LIBNL_H_ */
