@@ -291,6 +291,15 @@ static inline int porting_nla_put_string(struct nl_msg *msg, int attrtype, const
 
 #define nla_put_string porting_nla_put_string
 #endif
+#ifndef nla_put_u64
+static inline int nla_put_u64(struct nl_msg *msg, int attrtype, u64 value)
+{
+    (void)msg;
+    (void)attrtype;
+    (void)value;
+    return 0; // stub implementation for kernel build
+}
+#endif
 
 
 #endif /* __LIBNL_H_ */
