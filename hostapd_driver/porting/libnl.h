@@ -3,6 +3,13 @@
 
 #include <stddef.h>
 
+#ifdef __KERNEL__
+#ifndef NLE_NOMEM
+#define NLE_NOMEM ENOMEM
+#endif
+#endif
+
+
 /* =====================================
  * Basic stubs
  * ===================================== */
