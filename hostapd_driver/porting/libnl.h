@@ -375,7 +375,20 @@ static inline int porting_nla_parse(struct nlattr *tb[], int maxtype,
     return 0;
 }
 
+
+/* Kernel stub for nla_parse_nested — ignore nested parsing */
+static inline int porting_nla_parse_nested(struct nlattr *tb[], int maxtype,
+                                           const struct nlattr *head,
+                                           const struct hostapd_nla_policy *policy)
+{
+    (void)tb; (void)maxtype; (void)head; (void)policy;
+    return 0;
+}
+
+
 #define nla_parse(...) porting_nla_parse(__VA_ARGS__, NULL)
+#define nla_parse_nested(tb, maxtype, head, policy) \
+        porting_nla_parse_nested(tb, maxtype, head, policy)
 
 #endif /* __KERNEL__ */
 
