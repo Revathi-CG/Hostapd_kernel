@@ -316,4 +316,37 @@ struct nla_policy { int type; };
 #endif
 #endif
 
+#ifdef __KERNEL__
+// Stub for nl_cb_alloc
+#ifndef HOSTAPD_NL_CB_ALLOC_STUB
+#define HOSTAPD_NL_CB_ALLOC_STUB
+static inline void *nl_cb_alloc(int type)
+{
+    (void)type;
+    return NULL; // kernel build, just return NULL
+}
+
+// Define missing callback macros
+#ifndef NL_CB_DEFAULT
+#define NL_CB_DEFAULT 0
+#endif
+#ifndef NL_CB_SEQ_CHECK
+#define NL_CB_SEQ_CHECK 0
+#endif
+#ifndef NL_CB_CUSTOM
+#define NL_CB_CUSTOM 0
+#endif
+#ifndef NL_CB_FINISH
+#define NL_CB_FINISH 0
+#endif
+#ifndef NL_CB_ACK
+#define NL_CB_ACK 0
+#endif
+#ifndef NL_CB_VALID
+#define NL_CB_VALID 0
+#endif
+#endif
+#endif
+
+
 #endif /* __LIBNL_H_ */
