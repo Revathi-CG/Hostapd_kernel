@@ -187,12 +187,22 @@ static inline int daemon(int nochdir, int noclose)
 #endif
 
 #include "perror.h"
+
+#ifdef HOSTAPD_KERNEL
+#ifdef HOSTAPD_EAP_SERVER
+#undef free   // Temporarily disable the kernel macro for eap_server
+#endif
+#endif
+
+
+
 #include "rfkill_patch.h"
 #include "rfkill_compat.h"
 #include "ioctl_compat.h"
 #include "arp_compat.h"
 #include "readlink_compat.h"
 #include "errno_compat.h"
+#include "rand_compat.h"
 
 #endif
 
