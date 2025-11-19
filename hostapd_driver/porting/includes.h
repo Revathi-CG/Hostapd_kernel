@@ -1,6 +1,7 @@
 #ifndef __PORTING_INCLUDES_H_
 #define __PORTING_INCLUDES_H_
 
+
 //redefinition warnings after editing Makefile
 /* Prevent redefinition warnings for macros already defined by -D in Makefile */
 #ifdef CLOCK_BOOTTIME
@@ -34,6 +35,19 @@
 #undef CONFIG_ELOOP_SELECT
 #endif
 
+
+
+
+/* Include kernel netlink definitions */
+#include <linux/netlink.h>
+
+
+#ifdef __KERNEL__
+#else
+#include "porting_msghdr.h"
+#endif
+
+
 #include "libnl.h"
 
 
@@ -47,8 +61,6 @@
 
 #undef sendmsg
 #define sendmsg    porting_sendmsg
-#define recvmsg    porting_recvmsg
-ssize_t porting_sendmsg(int sock, struct user_msghdr *msg, int flags);
 
 #include <net/genetlink.h>
 
@@ -175,6 +187,12 @@ static inline int daemon(int nochdir, int noclose)
 #endif
 
 #include "perror.h"
+#include "rfkill_patch.h"
+#include "rfkill_compat.h"
+#include "ioctl_compat.h"
+#include "arp_compat.h"
+#include "readlink_compat.h"
+#include "errno_compat.h"
 
 #endif
 

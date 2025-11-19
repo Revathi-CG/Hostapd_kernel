@@ -139,7 +139,7 @@ static inline int kernel_lchown(const char *path, uid_t owner, gid_t group)
  * Kernel-space replacement for close()
  * Works for both sockets and regular file descriptors.
  */
-static inline int kernel_close(int fd)
+/*static inline int kernel_close(int fd)
 {
     struct socket *sock;
     struct file *filp;
@@ -161,10 +161,10 @@ static inline int kernel_close(int fd)
     }
 
     return -EBADF;  // Invalid FD
-}
+}*/
 
 /* Redirect user-space close() to our kernel version */
-#define close(fd) kernel_close(fd)
+//#define close(fd) kernel_close(fd)
 
 
 #endif
