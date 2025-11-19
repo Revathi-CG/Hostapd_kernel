@@ -411,17 +411,62 @@ static inline char *if_indextoname(unsigned int ifindex, char *name)
 }
 #endif
 #ifdef __KERNEL__
-#include <linux/types.h>
+struct nl_cache;
+struct genl_family;
 
-/* Stub for genl_ctrl_resolve to allow kernel-space compilation */
-static inline int genl_ctrl_resolve(void *nl, const char *name)
+/* Kernel stubs for userspace libnl functions */
+static inline int genl_ctrl_alloc_cache(void *nl, struct nl_cache **cache)
 {
-    (void)nl;    /* suppress unused parameter warning */
-    (void)name;  /* suppress unused parameter warning */
-    return 0;    /* safe dummy value */
+    (void)nl;
+    (void)cache;
+    return 0;  // dummy success
 }
 
-#endif /* __KERNEL__ */
+static inline struct genl_family *genl_ctrl_search(struct nl_cache *cache, int id)
+{
+    (void)cache;
+    (void)id;
+    return NULL;  // dummy pointer
+}
+
+static inline int genl_family_get_maxattr(struct genl_family *family)
+{
+    (void)family;
+    return 0;  // dummy max attribute
+}
+
+static inline void genl_family_put(struct genl_family *family)
+{
+    (void)family;
+    // do nothing
+}
+
+static inline void nl_cache_free(struct nl_cache *cache)
+{
+    (void)cache;
+    // do nothing
+}
+
+#ifdef __KERNEL__
+/* Kernel-space stubs for libnl functions */
+
+static inline int genl_ctrl_resolve(void *nl, const char *name)
+{
+    (void)nl;
+    (void)name;
+    return 0;  // dummy NL80211 ID
+}
+
+static inline int nl_socket_add_membership(void *nl, int group)
+{
+    (void)nl;
+    (void)group;
+    return 0;  // pretend success
+}
+#endif
+
+
+#endif
 
 
 #endif /* __LIBNL_H_ */
