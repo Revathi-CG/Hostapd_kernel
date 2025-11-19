@@ -391,6 +391,25 @@ static inline int porting_nla_parse_nested(struct nlattr *tb[], int maxtype,
         porting_nla_parse_nested(tb, maxtype, head, policy)
 
 #endif /* __KERNEL__ */
+#ifdef __KERNEL__
+#include <linux/types.h>
+
+/* Stub for if_nametoindex — always return 1 as dummy index */
+static inline unsigned int if_nametoindex(const char *ifname)
+{
+    (void)ifname;
+    return 1; /* dummy index */
+}
+
+/* Stub for if_indextoname — copy dummy interface name */
+static inline char *if_indextoname(unsigned int ifindex, char *name)
+{
+    (void)ifindex;
+    if (name)
+        name[0] = 'k', name[1] = '0', name[2] = '\0'; /* dummy name */
+    return name;
+}
+#endif
 
 
 #endif /* __LIBNL_H_ */
