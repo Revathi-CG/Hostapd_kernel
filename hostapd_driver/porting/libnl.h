@@ -410,6 +410,18 @@ static inline char *if_indextoname(unsigned int ifindex, char *name)
     return name;
 }
 #endif
+#ifdef __KERNEL__
+#include <linux/types.h>
+
+/* Stub for genl_ctrl_resolve to allow kernel-space compilation */
+static inline int genl_ctrl_resolve(void *nl, const char *name)
+{
+    (void)nl;    /* suppress unused parameter warning */
+    (void)name;  /* suppress unused parameter warning */
+    return 0;    /* safe dummy value */
+}
+
+#endif /* __KERNEL__ */
 
 
 #endif /* __LIBNL_H_ */
