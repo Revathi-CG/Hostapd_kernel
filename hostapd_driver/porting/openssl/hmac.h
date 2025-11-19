@@ -158,5 +158,56 @@ out:
 #define SHA1_MAC_LEN 20  /* SHA1 produces 20-byte digests */
 #endif
 
+#include <linux/crypto.h>
+#include <linux/slab.h>
+#include <linux/err.h>
+typedef struct {
+    struct crypto_shash *tfm;
+    struct shash_desc desc;
+} HMAC_CTX;
+
+static inline HMAC_CTX *HMAC_CTX_new(void)
+{
+    HMAC_CTX *ctx = kmalloc(sizeof(HMAC_CTX), GFP_KERNEL);
+    if (!ctx)
+        return NULL;
+
+    ctx->tfm = crypto_alloc_shash("hmac(sha256)", 0, 0);
+    if (IS_ERR(ctx->tfm)) {
+        kfree(ctx);
+        return NULL;
+    }
+
+    ctx->desc.tfm = ctx->tfm;    // don't set flags
+    return ctx;
+}
+
+static inline void HMAC_CTX_free(HMAC_CTX *ctx)
+{
+    if (!ctx)
+        return;
+    if (ctx->tfm && !IS_ERR(ctx->tfm))
+        crypto_free_shash(ctx->tfm);
+    kfree(ctx);
+}
+
+static inline int HMAC_Init_ex(HMAC_CTX *ctx, const u8 *key, int keylen,
+                               const void *unused1, void *unused2)
+{
+    return crypto_shash_setkey(ctx->tfm, key, keylen);
+}
+
+static inline int HMAC_Update(HMAC_CTX *ctx, const u8 *data, size_t datalen)
+{
+    return crypto_shash_update(&ctx->desc, data, datalen);  // pass desc
+}
+
+static inline int HMAC_Final(HMAC_CTX *ctx, u8 *out, unsigned int *outlen)
+{
+    int ret = crypto_shash_final(&ctx->desc, out);
+    if (outlen)
+        *outlen = 32;  // SHA256 output size
+    return ret;
+}
 
 #endif /* __HMAC_H_ */
