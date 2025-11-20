@@ -7,6 +7,8 @@
 typedef void BIGNUM;
 typedef void BN_CTX;
 typedef void EVP_MD;
+typedef void EVP_MD_CTX;
+
 
 /* Stub functions returning NULL or 0 */
 static inline BIGNUM *BN_bin2bn(const unsigned char *s, int len, BIGNUM *ret)
@@ -15,5 +17,14 @@ static inline BIGNUM *BN_bin2bn(const unsigned char *s, int len, BIGNUM *ret)
 }
 
 void openssl_load_legacy_provider(void);
+
+
+static inline int EVP_DigestInit_ex(EVP_MD_CTX *ctx, const EVP_MD *type, void *impl) { (void)ctx; (void)type; (void)impl; return 0; }
+static inline int EVP_DigestUpdate(EVP_MD_CTX *ctx, const void *data, size_t len) { (void)ctx; (void)data; (void)len; return 0; }
+static inline int EVP_DigestFinal(EVP_MD_CTX *ctx, unsigned char *md, unsigned int *len) { (void)ctx; (void)md; if (len) *len = 0; return 0; }
+
+static inline unsigned long ERR_get_error(void) { return 0; }
+static inline char *ERR_error_string(unsigned long e, char *buf) { (void)e; (void)buf; return "kernel_stub"; }
+
 #endif
 #endif /* __EVP_H_ */
