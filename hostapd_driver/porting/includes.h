@@ -218,5 +218,6 @@ static inline int daemon(int nochdir, int noclose)
 #define NEED_X509_COMPAT
 #include "openssl/x509.h"
 
+#include "openssl/ec.h"
 #endif
 
