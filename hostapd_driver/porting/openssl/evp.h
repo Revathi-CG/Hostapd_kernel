@@ -8,6 +8,8 @@ typedef void BIGNUM;
 typedef void BN_CTX;
 typedef void EVP_MD;
 typedef void EVP_MD_CTX;
+typedef void EVP_CIPHER;
+typedef void EVP_CIPHER_CTX;
 
 
 /* Stub functions returning NULL or 0 */
@@ -33,6 +35,17 @@ static inline const EVP_MD *EVP_sha256(void) { return (EVP_MD *)0x2; }
 static inline const EVP_MD *EVP_sha384(void) { return (EVP_MD *)0x3; }
 static inline const EVP_MD *EVP_sha512(void) { return (EVP_MD *)0x4; }
 
+static inline const EVP_CIPHER *EVP_aes_128_ecb(void) { return NULL; }
+static inline const EVP_CIPHER *EVP_aes_192_ecb(void) { return NULL; }
+static inline const EVP_CIPHER *EVP_aes_256_ecb(void) { return NULL; }
+static inline EVP_CIPHER_CTX *EVP_CIPHER_CTX_new(void) { return NULL; }
+static inline void EVP_CIPHER_CTX_free(EVP_CIPHER_CTX *ctx) { }
+static inline int EVP_EncryptInit_ex(EVP_CIPHER_CTX *ctx,
+                                     const EVP_CIPHER *type,
+                                     void *impl,
+                                     const unsigned char *key,
+                                     const unsigned char *iv) { return 0; }
+static inline int EVP_CIPHER_CTX_set_padding(EVP_CIPHER_CTX *ctx, int pad) { return 0; }
 
 #endif
 #endif /* __EVP_H_ */
