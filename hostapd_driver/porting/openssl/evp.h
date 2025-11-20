@@ -14,12 +14,6 @@ static inline BIGNUM *BN_bin2bn(const unsigned char *s, int len, BIGNUM *ret)
     return NULL;
 }
 
-static inline int openssl_digest_vector(const EVP_MD *type, size_t num_elem,
-                                        const unsigned char *addr[], const size_t *len,
-                                        unsigned char *mac)
-{
-    return -1;
-}
-
+void openssl_load_legacy_provider(void);
 #endif
 #endif /* __EVP_H_ */
