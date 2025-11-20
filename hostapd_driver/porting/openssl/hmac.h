@@ -27,6 +27,24 @@
 
 #endif /* HOSTAPD_COMPILING_CRYPTO_OPENSSL */
 
+/* ================================================================
+ * Disable EVP_MD_CTX fallback code in crypto_openssl.c
+ * to avoid missing type/implicit declaration errors.
+ * ================================================================ */
+#ifdef HOSTAPD_COMPILING_CRYPTO_OPENSSL
+
+/* Define dummy EVP_MD_CTX type so hostapd's fallback compiles */
+typedef void EVP_MD_CTX;
+
+/* Stub out old OpenSSL 1.0.2-style init/cleanup APIs */
+#define EVP_MD_CTX_init(ctx)        do {} while (0)
+#define EVP_MD_CTX_cleanup(ctx)     do {} while (0)
+
+/* Prevent hostapd's fallback definitions from conflicting */
+#define PORTING_DISABLE_EVP_MD_CTX
+
+#endif /* HOSTAPD_COMPILING_CRYPTO_OPENSSL */
+
 
 /* Kernel-space HMAC-MD5 replacement for hostapd */
 static inline int kernel_hmac_md5(const u8 *key, size_t key_len,
