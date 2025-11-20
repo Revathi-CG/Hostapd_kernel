@@ -1,5 +1,8 @@
 #ifndef __PORTING_INCLUDES_H_
 #define __PORTING_INCLUDES_H_
+#include "openssl/asn1_compat.h"
+
+
 
 
 //redefinition warnings after editing Makefile
