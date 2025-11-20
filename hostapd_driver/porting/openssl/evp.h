@@ -26,5 +26,13 @@ static inline int EVP_DigestFinal(EVP_MD_CTX *ctx, unsigned char *md, unsigned i
 static inline unsigned long ERR_get_error(void) { return 0; }
 static inline char *ERR_error_string(unsigned long e, char *buf) { (void)e; (void)buf; return "kernel_stub"; }
 
+
+/* Stub SHA functions returning dummy EVP_MD pointer */
+static inline const EVP_MD *EVP_sha1(void)   { return (EVP_MD *)0x1; }
+static inline const EVP_MD *EVP_sha256(void) { return (EVP_MD *)0x2; }
+static inline const EVP_MD *EVP_sha384(void) { return (EVP_MD *)0x3; }
+static inline const EVP_MD *EVP_sha512(void) { return (EVP_MD *)0x4; }
+
+
 #endif
 #endif /* __EVP_H_ */
