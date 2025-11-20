@@ -166,7 +166,7 @@ typedef struct {
     struct shash_desc desc;
 } HMAC_CTX;
 
-static inline HMAC_CTX *HMAC_CTX_new(void)
+static inline HMAC_CTX *hostapd_HMAC_CTX_new(void)
 {
     HMAC_CTX *ctx = kmalloc(sizeof(HMAC_CTX), GFP_KERNEL);
     if (!ctx)
@@ -178,7 +178,7 @@ static inline HMAC_CTX *HMAC_CTX_new(void)
         return NULL;
     }
 
-    ctx->desc.tfm = ctx->tfm;    // don't set flags
+    ctx->desc.tfm = ctx->tfm;
     return ctx;
 }
 
@@ -210,4 +210,26 @@ static inline int HMAC_Final(HMAC_CTX *ctx, u8 *out, unsigned int *outlen)
     return ret;
 }
 
+/* Only map HMAC_CTX_new to hostapd_HMAC_CTX_new if not compiling crypto_openssl.c */
+#ifndef HOSTAPD_COMPILING_CRYPTO_OPENSSL
+#ifndef HMAC_CTX_new
+#define HMAC_CTX_new hostapd_HMAC_CTX_new
+#endif
+#endif /* HOSTAPD_COMPILING_CRYPTO_OPENSSL */
+
+/* ----------------------------------------------------------
+ * Default lengths
+ * ---------------------------------------------------------- 
+#ifndef MD5_MAC_LEN
+#define MD5_MAC_LEN 16
+#endif
+
+#ifndef SHA1_MAC_LEN
+#define SHA1_MAC_LEN 20
+#endif
+
+#ifndef SHA256_MAC_LEN
+#define SHA256_MAC_LEN 32
+#endif
+*/
 #endif /* __HMAC_H_ */
