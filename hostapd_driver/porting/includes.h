@@ -208,5 +208,15 @@ static inline int daemon(int nochdir, int noclose)
 #include "errno_compat.h"
 #include "rand_compat.h"
 
+
+#ifndef __KERNEL__
+
+#include <openssl/asn1.h>
+#include <openssl/x509.h>
+
+#endif
+#define NEED_X509_COMPAT
+#include "openssl/x509.h"
+
 #endif
 
