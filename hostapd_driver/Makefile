@@ -40,12 +40,6 @@ hostapd_driver-objs := 	hostapd-2.11/hostapd/main.o \
 	hostapd-2.11/hostapd/../src/common/ctrl_iface_common.o \
 	hostapd-2.11/hostapd/ctrl_iface.o \
 	hostapd-2.11/hostapd/../src/ap/ctrl_iface_ap.o \
-	hostapd-2.11/hostapd/../src/drivers/driver_nl80211.o \
-	hostapd-2.11/hostapd/../src/drivers/driver_nl80211_capa.o \
-	hostapd-2.11/hostapd/../src/drivers/driver_nl80211_event.o \
-	hostapd-2.11/hostapd/../src/drivers/driver_nl80211_monitor.o \
-	hostapd-2.11/hostapd/../src/drivers/driver_nl80211_scan.o \
-	hostapd-2.11/hostapd/../src/drivers/netlink.o \
 	hostapd-2.11/hostapd/../src/drivers/rfkill.o \
 	hostapd-2.11/hostapd/../src/utils/radiotap.o \
 	hostapd-2.11/hostapd/../src/drivers/linux_ioctl.o \
@@ -53,7 +47,6 @@ hostapd_driver-objs := 	hostapd-2.11/hostapd/main.o \
 	hostapd-2.11/hostapd/eap_register.o \
 	hostapd-2.11/hostapd/../src/eap_server/eap_server.o \
 	hostapd-2.11/hostapd/../src/eap_common/eap_common.o \
-	hostapd-2.11/hostapd/../src/eap_server/eap_server_methods.o \
 	hostapd-2.11/hostapd/../src/eap_server/eap_server_identity.o \
 	hostapd-2.11/hostapd/../src/crypto/crypto_openssl.o \
 	hostapd-2.11/hostapd/../src/crypto/tls_none.o \
@@ -71,6 +64,13 @@ hostapd_driver-objs := 	hostapd-2.11/hostapd/main.o \
 	hostapd-2.11/hostapd/../src/ap/dfs.o \
 	hostapd-2.11/hostapd/../src/ap/ieee802_11_ht.o \
 	hostapd-2.11/hostapd/../src/drivers/driver_common.o \
+        hostapd-2.11/hostapd/../src/drivers/driver_nl80211.o \
+        hostapd-2.11/hostapd/../src/drivers/driver_nl80211_capa.o \
+        hostapd-2.11/hostapd/../src/drivers/driver_nl80211_event.o \
+        hostapd-2.11/hostapd/../src/drivers/driver_nl80211_monitor.o \
+        hostapd-2.11/hostapd/../src/drivers/driver_nl80211_scan.o \
+        hostapd-2.11/hostapd/../src/drivers/netlink.o \
+        hostapd-2.11/hostapd/../src/eap_server/eap_server_methods.o \
 
 ccflags-y += -I./porting -include porting/includes.h
 EXTRA_CFLAGS += -include $(PWD)/hostapd-2.11/src/utils/common.h
@@ -101,6 +101,9 @@ ccflags-y += -Wno-frame-larger-than
 ccflags-y += -Wno-overflow -Wno-sign-conversion
 ccflags-y += -Wno-format -Wno-format-extra-args
 ccflags-y += -Wno-undef
+
+CFLAGS += -Dhostapd_sendmsg_wrapper=hostapd_sendmsg_wrapper 
+ccflags-y += -DHOSTAPD_COMPILING_CRYPTO_OPENSSL
 
 ccflags-y += -DCONFIG_NO_VLAN
 ccflags-y += -DCONFIG_NO_RADIUS

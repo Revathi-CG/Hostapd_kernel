@@ -8,6 +8,26 @@
 #include <linux/slab.h>
 #include <linux/types.h>
 
+/* ======================================================================
+ * Hostapd crypto_openssl.c must use its own HMAC_CTX_new/HMAC_CTX_free.
+ * Prevent ANY kernel HMAC override when compiling crypto_openssl.c.
+ * ====================================================================== */
+#ifdef HOSTAPD_COMPILING_CRYPTO_OPENSSL
+
+/* OpenSSL 1.1+ removed these: make them harmless stubs */
+#define HMAC_CTX_init(ctx)       do {} while (0)
+#define HMAC_CTX_cleanup(ctx)    do {} while (0)
+
+/* Remove our kernel HMAC replacement to avoid redefinition */
+#undef HMAC_CTX_new
+#undef HMAC_CTX_free
+
+/* DO NOT define hostapd_HMAC_CTX_new/free for this file */
+#define PORTING_DISABLE_KERNEL_HMAC
+
+#endif /* HOSTAPD_COMPILING_CRYPTO_OPENSSL */
+
+
 /* Kernel-space HMAC-MD5 replacement for hostapd */
 static inline int kernel_hmac_md5(const u8 *key, size_t key_len,
                                   const u8 *data, size_t data_len,
@@ -166,6 +186,7 @@ typedef struct {
     struct shash_desc desc;
 } HMAC_CTX;
 
+#ifndef PORTING_DISABLE_KERNEL_HMAC
 static inline HMAC_CTX *hostapd_HMAC_CTX_new(void)
 {
     HMAC_CTX *ctx = kmalloc(sizeof(HMAC_CTX), GFP_KERNEL);
@@ -190,6 +211,8 @@ static inline void HMAC_CTX_free(HMAC_CTX *ctx)
         crypto_free_shash(ctx->tfm);
     kfree(ctx);
 }
+#endif
+
 
 static inline int HMAC_Init_ex(HMAC_CTX *ctx, const u8 *key, int keylen,
                                const void *unused1, void *unused2)
@@ -214,6 +237,7 @@ static inline int HMAC_Final(HMAC_CTX *ctx, u8 *out, unsigned int *outlen)
 #ifndef HOSTAPD_COMPILING_CRYPTO_OPENSSL
 #ifndef HMAC_CTX_new
 #define HMAC_CTX_new hostapd_HMAC_CTX_new
+#define HMAC_CTX_free hostapd_HMAC_CTX_free
 #endif
 #endif /* HOSTAPD_COMPILING_CRYPTO_OPENSSL */
 

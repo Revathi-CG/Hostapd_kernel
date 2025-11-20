@@ -35,6 +35,7 @@
 #undef CONFIG_ELOOP_SELECT
 #endif
 
+#define OPENSSL_API_COMPAT 0x10100000L
 
 
 
