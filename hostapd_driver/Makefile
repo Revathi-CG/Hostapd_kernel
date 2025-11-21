@@ -77,7 +77,7 @@ hostapd_driver-objs := 	hostapd-2.11/hostapd/main.o \
         hostapd-2.11/hostapd/../src/eap_server/eap_server_methods.o \
         hostapd-2.11/hostapd/../src/crypto/crypto_openssl.o \
 
-
+CFLAGS_hostapd-2.11/hostapd/../src/crypto/random.o := -D__HOSTAPD_RANDOM_C__
  ccflags-y += -I./porting -include porting/includes.h 
 EXTRA_CFLAGS += -include $(PWD)/hostapd-2.11/src/utils/common.h
 ccflags-y += -I./hostapd-2.11/hostapd 
