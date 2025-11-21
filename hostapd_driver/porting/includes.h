@@ -234,5 +234,7 @@ static inline int daemon(int nochdir, int noclose)
 #include "openssl/ec.h"
 #endif
 
+#include "ctype.h"
+
 #endif
 
