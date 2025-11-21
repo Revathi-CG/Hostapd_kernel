@@ -10,6 +10,15 @@ typedef void EVP_MD;
 typedef void EVP_MD_CTX;
 typedef void EVP_CIPHER;
 typedef void EVP_CIPHER_CTX;
+//typedef void DH;
+typedef void BIGNUM;
+typedef struct {
+    BIGNUM *p;
+    BIGNUM *g;
+    BIGNUM *q;
+    BIGNUM *pub_key;
+    BIGNUM *priv_key;
+} DH;
 
 
 /* Stub functions returning NULL or 0 */
@@ -93,5 +102,21 @@ static inline int EVP_CIPHER_CTX_set_key_length(EVP_CIPHER_CTX *ctx, int key_len
     return 1;  // Return success
 }
 
+static inline DH *DH_new(void) { return (DH *)0x1; }
+static inline void DH_free(DH *dh) { (void)dh; }
+
+static inline int DH_generate_key(DH *dh) { (void)dh; return 1; }
+
+static inline int BN_set_word(BIGNUM *bn, unsigned long w) { (void)bn; (void)w; return 1; }
+/* BN functions */
+static inline int BN_num_bytes(const BIGNUM *bn) { (void)bn; return 1; }
+
+/* DH functions */
+static inline int DH_size(const DH *dh) { (void)dh; return 1; }
+static inline int DH_compute_key(unsigned char *key, const BIGNUM *pub_key, const DH *dh)
+{ (void)key; (void)pub_key; (void)dh; return 1; }
+
+/* EVP digest stubs */
+static inline const EVP_MD *EVP_md5(void) { return (EVP_MD *)0x5; }
 
 #endif /* __EVP_H_ */
