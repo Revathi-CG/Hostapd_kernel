@@ -15,7 +15,10 @@ typedef void EVP_CIPHER_CTX;
 /* Stub functions returning NULL or 0 */
 static inline BIGNUM *BN_bin2bn(const unsigned char *s, int len, BIGNUM *ret)
 {
-    return NULL;
+	(void)s;
+    (void)len;
+    (void)ret;
+    return (BIGNUM *)0x1;  // dummy non-NULL pointer
 }
 
 void openssl_load_legacy_provider(void);
@@ -59,4 +62,27 @@ static inline const EVP_CIPHER *EVP_aes_192_cbc(void) { return NULL; }
 static inline const EVP_CIPHER *EVP_aes_256_cbc(void) { return NULL; }
 
 #endif
+#ifdef __KERNEL__
+
+/* Dummy OpenSSL types */
+typedef void BIGNUM;
+typedef void BN_CTX;
+
+/* Stub BIGNUM functions */
+static inline BIGNUM *BN_new(void) { return (BIGNUM *)0x1; }
+static inline void BN_clear_free(BIGNUM *bn) { (void)bn; }
+static inline int BN_is_zero(const BIGNUM *bn) { (void)bn; return 0; }
+static inline int BN_is_one(const BIGNUM *bn) { (void)bn; return 0; }
+static inline int BN_cmp(const BIGNUM *a, const BIGNUM *b) { (void)a; (void)b; return 0; }
+static inline BN_CTX *BN_CTX_new(void) { return (BN_CTX *)0x1; }
+static inline void BN_CTX_free(BN_CTX *ctx) { (void)ctx; }
+static inline int BN_mod_exp(BIGNUM *r, const BIGNUM *a, const BIGNUM *p, const BIGNUM *m, BN_CTX *ctx)
+{ (void)r; (void)a; (void)p; (void)m; (void)ctx; return 0; }
+static inline int BN_mod_exp_mont_consttime(BIGNUM *r, const BIGNUM *a, const BIGNUM *p, const BIGNUM *m, BN_CTX *ctx, void *mont)
+{ (void)r; (void)a; (void)p; (void)m; (void)ctx; (void)mont; return 0; }
+static inline int BN_bn2bin(const BIGNUM *a, unsigned char *to) { (void)a; (void)to; return 0; }
+
+#endif
+
+
 #endif /* __EVP_H_ */
