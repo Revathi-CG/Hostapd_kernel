@@ -53,6 +53,10 @@ static inline int EVP_DecryptInit_ex(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *type
 static inline int EVP_DecryptUpdate(EVP_CIPHER_CTX *ctx, u8 *out, int *outlen,
                                     const u8 *in, int inlen) { return 0; }
 static inline int EVP_DecryptFinal_ex(EVP_CIPHER_CTX *ctx, u8 *out, int *outlen) { return 0; }
+/* Add missing CBC stubs */
+static inline const EVP_CIPHER *EVP_aes_128_cbc(void) { return NULL; }
+static inline const EVP_CIPHER *EVP_aes_192_cbc(void) { return NULL; }
+static inline const EVP_CIPHER *EVP_aes_256_cbc(void) { return NULL; }
 
 #endif
 #endif /* __EVP_H_ */
