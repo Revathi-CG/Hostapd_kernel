@@ -10,7 +10,7 @@
 #endif
 #endif
 
-
+#define UINT32_MAX 1
 
 /* =====================================
  * Basic stubs
@@ -66,10 +66,6 @@ static inline int nl_socket_get_fd(struct nl_sock *sock) { return -1; }
 /* Stub for nlmsg_alloc to avoid implicit declaration in kernel space */
 #ifndef HOSTAPD_NLMSG_ALLOC_STUB
 #define HOSTAPD_NLMSG_ALLOC_STUB
-static inline struct nl_msg *nlmsg_alloc(void)
-{
-    return NULL;  /* return NULL to satisfy compiler; not actually used in kernel build */
-}
 #endif
 
 #endif /* __KERNEL__ */
@@ -231,13 +227,12 @@ static inline int porting_nla_put_flag(struct nl_msg *msg, int attrtype)
 }
 #define nla_put_flag(msg, attrtype) porting_nla_put_flag(msg, attrtype)
 #endif
-
+/*
 #ifndef nla_put_u16
 static inline int porting_nla_put_u16(struct nl_msg *msg, int attrtype, unsigned short val)
 {
     (void)msg; (void)attrtype; (void)val; return 0;
 }
-#define nla_put_u16(msg, attrtype, val) porting_nla_put_u16(msg, attrtype, val)
 #endif
 
 #ifndef nla_put_u32
@@ -245,7 +240,6 @@ static inline int porting_nla_put_u32(struct nl_msg *msg, int attrtype, unsigned
 {
     (void)msg; (void)attrtype; (void)val; return 0;
 }
-#define nla_put_u32(msg, attrtype, val) porting_nla_put_u32(msg, attrtype, val)
 #endif
 
 #ifndef nla_put
@@ -253,8 +247,9 @@ static inline int porting_nla_put(struct nl_msg *msg, int attrtype, int len, con
 {
     (void)msg; (void)attrtype; (void)len; (void)data; return 0;
 }
-#define nla_put(msg, attrtype, len, data) porting_nla_put(msg, attrtype, len, data)
 #endif
+*/
+
 
 /* Only for Hostapd internal porting: provide a stub so code compiles */
 /* Stub for genlmsg_put to compile Hostapd against kernel 6.14 */
@@ -288,7 +283,7 @@ static inline int porting_nla_put_string(struct nl_msg *msg, int attrtype, const
 
 #define nla_put_string porting_nla_put_string
 #endif
-#ifndef nla_put_u64
+/*#ifndef nla_put_u64
 static inline int nla_put_u64(struct nl_msg *msg, int attrtype, u64 value)
 {
     (void)msg;
@@ -297,6 +292,8 @@ static inline int nla_put_u64(struct nl_msg *msg, int attrtype, u64 value)
     return 0; // stub implementation for kernel build
 }
 #endif
+*/
+
 
 /* =====================================
  * nl_cb stubs
@@ -467,5 +464,106 @@ static inline int nl_socket_add_membership(void *nl, int group)
 
 #endif
 
+// In ./porting/libnl.h (or a new netlink porting file)
+
+// Ensure hostapd knows it's compiling for the kernel
+#ifndef __KERNEL__
+#define __KERNEL__ 1
+#endif
+
+// Cast the hostapd's struct nl_msg* argument to the kernel's struct sk_buff*
+#define nla_put_u8(msg, type, val) \
+    nla_put_u8((struct sk_buff *)(msg), type, val)
+
+#define nla_put_u16(msg, type, val) \
+    nla_put_u16((struct sk_buff *)(msg), type, val)
+
+// Fixes: error: passing argument 1 of ‘nla_put_u32’ from incompatible pointer type
+#define nla_put_u32(msg, type, val) \
+    nla_put_u32((struct sk_buff *)(msg), type, val)
+
+#ifdef __KERNEL__   // if compiling with kernel headers
+// Use kernel's nla_nest_start, do nothing
+#else
+static inline struct nlattr *nla_nest_start(struct nl_msg *msg, int attrtype)
+{
+    return nla_nest_start((struct sk_buff *)msg, attrtype);
+}
+#endif
+
+
+
+
+#ifdef nla_nest_end
+#undef nla_nest_end
+#endif
+#define nla_nest_end(msg, start) \
+    nla_nest_end((struct sk_buff *)(msg), start)
+
+// You will likely need to add more of these for other nl_* functions later
+#ifdef nla_put_nested
+#undef nla_put_nested
+#endif
+#ifndef nla_put_nested
+// ADD THIS MISSING MACRO (Implicit declaration error)
+#define nla_put_nested(msg, type, attr) \
+    nla_put_nested((struct sk_buff *)(msg), type, attr)
+#endif
+
+#define nla_put(msg, type, len, data) \
+    nla_put((struct sk_buff *)(msg), type, len, data)
+#ifndef nla_put_u64
+#define nla_put_u64(msg, type, val) \
+    nla_put_u64((struct sk_buff *)(msg), type, val)
+#endif
+/* Add/Update nlmsg_alloc stubs */
+// porting/libnl.h around line 536 (Conceptual view)
+// ... previous code line without a semicolon ...
+
+static inline struct nl_msg *nlmsg_alloc(void)
+{
+    // The previous definition was likely the correct one, ensure it's present and only once.
+    // If you removed the previous duplicate, this should resolve the implicit declaration.
+    return NULL;
+}
+
+#define nlmsg_alloc_size(size) nlmsg_alloc()
+#define nlmsg_alloc_simple(type, flags) nlmsg_alloc()
+
+/* Stub nl_wait_for_ack */
+static inline int nl_wait_for_ack(void *sk)
+{
+    (void)sk;
+    return 0; // Kernel doesn't wait for ACK this way
+}
+
+/* Stub nl_socket_alloc */
+static inline void *nl_socket_alloc(void)
+{
+    return NULL; // Return NULL like nl_socket_alloc_cb
+}
+
+// Step 2: Define nlmsg_append to use the kernel's nlmsg_put or a stub
+#ifndef nlmsg_append
+// nlmsg_put is the kernel equivalent. We only need to check if the allocation succeeded (msg != NULL).
+#define nlmsg_append(msg, hdr, len, align) \
+    ({ int __ret = 0; if (msg == NULL) __ret = -1; __ret; })
+
+
+
+#endif
+
+// Fixes implicit declaration of 'nla_get_string'
+static inline const char *nla_get_string(struct nlattr *nla)
+{
+    // In the kernel, nla_data() retrieves the attribute payload pointer
+    return (const char *)nla_data(nla);
+}
+// Wrapper macro for hostapd tb array
+#define HOSTAPD_NLATTR_ARRAY(name, max) \
+    struct nlattr *name[(max) + 1] = {0}
+#ifndef UNUSED
+#define UNUSED(x) (void)(x)
+#endif
 
 #endif /* __LIBNL_H_ */

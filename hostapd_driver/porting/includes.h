@@ -1,11 +1,29 @@
 #ifndef __PORTING_INCLUDES_H_
 #define __PORTING_INCLUDES_H_
+
+
+#ifdef __KERNEL__
+// Undefine 'free' to prevent macro expansion conflicts with struct eap_method's 'free' member
+#undef free
+// Redefine os_free to use kernel's kfree for memory deallocation
+#define os_free kfree
+// Ensure eap_method's free function uses kfree in kernel context
+// (This assumes the eap_method's free pointer is set to os_free or similar in hostapd code)
+#else
+// User-space definitions (if any)
+#define os_free free
+#endif
 #include "openssl/asn1_compat.h"
-// In ./porting/includes.h (or wherever you put global defines)
 
-// This flag often disables user-space IO/helper functions in drivers
-#define NO_HOSTAPD_DRV_FUNCTIONS
+// Use a flag to completely remove the function body in the source file
+// The hostapd source code likely wraps this function with #ifndef/endif
+#define CONFIG_NO_STDOUT_DEBUG 1
+#define CONFIG_NO_DUMP_STATE 1
 
+
+// ADD/REPLACE with the following:
+#define wpa_driver_nl80211_handle_eapol_tx_status \
+	porting_wpa_driver_nl80211_handle_eapol_tx_status_stub
 
 
 /* Disable OpenSSL backend when building inside kernel */
@@ -17,10 +35,13 @@
 #define CONFIG_TLS_INTERNAL
 #define CONFIG_CRYPTO_INTERNAL
 
+// ./porting/includes.h
 
+// --- FIX: Command-Line Macro Conflicts ---
+// These #undefs remove definitions forced via the Makefile's -D flags
+// (seen as <command-line>: note: this is the location of the previous definition)
+// This prevents the kernel headers from throwing 'redefined' warnings.
 
-//redefinition warnings after editing Makefile
-/* Prevent redefinition warnings for macros already defined by -D in Makefile */
 #ifdef CLOCK_BOOTTIME
 #undef CLOCK_BOOTTIME
 #endif
@@ -29,6 +50,9 @@
 #undef SOL_NETLINK
 #endif
 
+// --- Standard Includes and other necessary porting definitions below ---
+
+// ... (Rest of your includes and definitions, including the Netlink guards and library includes)
 #ifdef ETH_P_PREAUTH
 #undef ETH_P_PREAUTH
 #endif
@@ -63,7 +87,14 @@
 #include "porting_msghdr.h"
 
 
+
+#ifndef HOSTAPD_LIBNL_H_ALREADY_INCLUDED
+#define HOSTAPD_LIBNL_H_ALREADY_INCLUDED
 #include "libnl.h"
+#endif
+#ifndef HOSTAPD_NLATTR_ARRAY
+#define HOSTAPD_NLATTR_ARRAY(name, size) struct nlattr *name[size] = {0}
+#endif
 
 
 #pragma once
@@ -112,7 +143,12 @@
 
 #include "sys/socket.h"
 
+#include <string.h>
+
 #include "ieee80211_external.h"
+
+// Fixes 'UINT32_MAX' undeclared error
+#include <stdint.h>
 
 /* This file gets force-included via Makefile to override random_init() */
 #include "random.h"
@@ -134,6 +170,7 @@
 #include "byteswap.h"
 #include "signal.h"
 
+#define HOSTAPD_COMPILING_CRYPTO_OPENSSL
 #include "openssl/hmac.h"
 #include "linux/types.h"
 // Replace atoi() with kstrtoint() for kernel environment
@@ -240,7 +277,12 @@ static inline int daemon(int nochdir, int noclose)
 #endif
 
 #include "ctype.h"
-
-
+/* --- ADD THIS AT THE VERY END OF porting/includes.h --- */
+/* Alias struct msghdr to our porting struct ONLY for Hostapd source files. */
+/* This must come AFTER all kernel headers are included. */
+#define msghdr porting_user_msghdr
+/* 2. ADD THIS: Alias iovec so the types match inside the structure */
+#define iovec porting_iovec
 #endif
+
 

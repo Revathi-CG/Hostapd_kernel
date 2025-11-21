@@ -8,6 +8,7 @@
 #include <linux/time.h> // Provides struct tm
 			
 #include "signal.h"
+// Inside your porting file where CLOCK_BOOTTIME is defined
 
 
 typedef long time_t;  /* kernel-compatible stub */

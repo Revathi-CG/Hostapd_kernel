@@ -1,12 +1,18 @@
 #ifndef __HMAC_H_
 #define __HMAC_H_
 
-
 #include <linux/crypto.h>
 #include <linux/err.h>
 #include <linux/string.h>
 #include <linux/slab.h>
 #include <linux/types.h>
+
+/* ============================================================
+ * Detect when compiling crypto_openssl.c WITHOUT modifying it.
+ * crypto_openssl.c always defines CONFIG_TLS_INTERNAL via crypto.h
+ * ============================================================ */
+/* Correctly detect when crypto_openssl.c is being compiled */
+
 
 /* ======================================================================
  * Hostapd crypto_openssl.c must use its own HMAC_CTX_new/HMAC_CTX_free.
@@ -90,7 +96,6 @@ out:
 
 /* Redirect all calls to hmac_md5() to kernel_hmac_md5() */
 #define hmac_md5 kernel_hmac_md5
-
 
 #include <linux/kernel.h>
 
@@ -183,7 +188,6 @@ out:
     crypto_free_shash(tfm);
     return ret;
 }
-
 #define hmac_sha1_vector(key, key_len, num_elem, addr, len, digest) \
         kernel_hmac_sha1_vector(key, key_len, num_elem, addr, len, digest)
 

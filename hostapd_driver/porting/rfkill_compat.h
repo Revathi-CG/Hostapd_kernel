@@ -2,7 +2,7 @@
 #define RFKILL_COMPAT_H
 
 #include <linux/types.h>
-
+#include<stdlib.h>
 /* Stub: return fake fd */
 static inline int rfkill_open(const char *path)
 {

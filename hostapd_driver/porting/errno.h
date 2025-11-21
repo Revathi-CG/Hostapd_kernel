@@ -27,4 +27,25 @@ static inline const char *strerror(int err)
     }
 }
 
+// Define ENOTSUP if it's missing (it usually is in older kernel headers)
+#ifndef ENOTSUP
+#define ENOTSUP 95
+#endif
+
+// Stub utsname and uname function to allow compilation
+struct utsname {
+    char sysname[65];
+    char nodename[65];
+    char release[65];
+    char version[65];
+    char machine[65];
+    char domainname[65];
+};
+
+static inline int uname(struct utsname *name)
+{
+    (void)name;
+    return -1; // Indicate failure to acquire info in kernel space
+}
+
 #endif

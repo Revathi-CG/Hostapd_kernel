@@ -4,6 +4,6 @@
 
 struct wpabuf;
 void wpabuf_printf(struct wpabuf *buf, char *fmt, ...);
-
+static inline void wpa_debug_stop_log(void) {}
 #endif
 

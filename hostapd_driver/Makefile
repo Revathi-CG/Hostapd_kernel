@@ -67,6 +67,8 @@ hostapd_driver-objs := 	hostapd-2.11/hostapd/main.o \
 	hostapd-2.11/hostapd/../src/ap/dfs.o \
 	hostapd-2.11/hostapd/../src/ap/ieee802_11_ht.o \
 	hostapd-2.11/hostapd/../src/drivers/driver_common.o \
+        hostapd-2.11/hostapd/ctrl_iface.o \
+        hostapd-2.11/hostapd/../src/crypto/crypto_openssl.o \
         hostapd-2.11/hostapd/../src/drivers/driver_nl80211.o \
         hostapd-2.11/hostapd/../src/drivers/driver_nl80211_capa.o \
         hostapd-2.11/hostapd/../src/drivers/driver_nl80211_event.o \
@@ -74,8 +76,6 @@ hostapd_driver-objs := 	hostapd-2.11/hostapd/main.o \
         hostapd-2.11/hostapd/../src/drivers/driver_nl80211_scan.o \
         hostapd-2.11/hostapd/../src/drivers/netlink.o \
         hostapd-2.11/hostapd/../src/eap_server/eap_server_methods.o \
-        hostapd-2.11/hostapd/../src/crypto/crypto_openssl.o \
-        hostapd-2.11/hostapd/ctrl_iface.o \
 
 CFLAGS_hostapd-2.11/hostapd/../src/crypto/random.o := -D__HOSTAPD_RANDOM_C__
 # In your main driver Makefile (e.g., in hostapd_driver/Makefile)
@@ -84,6 +84,8 @@ CFLAGS_hostapd-2.11/hostapd/../src/crypto/random.o := -D__HOSTAPD_RANDOM_C__
 
 # Inject the flag to hide the static inline definition when compiling the source file
 CFLAGS_hostapd-2.11/hostapd/../src/drivers/driver_nl80211.o := -D__HOSTAPD_DRIVER_NL80211_C__
+
+CFLAGS += -DHOSTAPD_COMPILING_CRYPTO_OPENSSL
 
 ccflags-y += -I./porting -include porting/includes.h 
 EXTRA_CFLAGS += -include $(PWD)/hostapd-2.11/src/utils/common.h
@@ -114,6 +116,7 @@ ccflags-y += -Wno-frame-larger-than
 ccflags-y += -Wno-overflow -Wno-sign-conversion
 ccflags-y += -Wno-format -Wno-format-extra-args
 ccflags-y += -Wno-undef
+ccflags-y += -Wno-unused-function
 
 CFLAGS += -Dhostapd_sendmsg_wrapper=hostapd_sendmsg_wrapper 
 

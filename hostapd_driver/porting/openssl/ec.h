@@ -52,7 +52,7 @@ static inline BIGNUM *get_rfc3526_prime_1536(BIGNUM *bn)
 {
     return NULL;
 }
-
+#ifndef HOSTAPD_COMPILING_CRYPTO_OPENSSL
 /* Non-GFp variants used by hostapd’s crypto_openssl.c */
 static inline __attribute__((unused))
 int EC_POINT_get_affine_coordinates(const EC_GROUP *group,
@@ -62,7 +62,8 @@ int EC_POINT_get_affine_coordinates(const EC_GROUP *group,
 {
     return 0;
 }
-
+#endif
+#ifndef HOSTAPD_COMPILING_CRYPTO_OPENSSL
 static inline __attribute__((unused))
 int EC_POINT_set_affine_coordinates(const EC_GROUP *group,
                                     EC_POINT *point,
@@ -72,6 +73,8 @@ int EC_POINT_set_affine_coordinates(const EC_GROUP *group,
 {
     return 0;
 }
+#endif
+#ifndef HOSTAPD_COMPILING_CRYPTO_OPENSSL
 
 static inline __attribute__((unused))
 int EC_POINT_set_compressed_coordinates(const EC_GROUP *group,
@@ -82,6 +85,8 @@ int EC_POINT_set_compressed_coordinates(const EC_GROUP *group,
 {
     return 0;
 }
+#endif
+#ifndef HOSTAPD_COMPILING_CRYPTO_OPENSSL
 
 static inline __attribute__((unused))
 int EC_GROUP_get_curve(const EC_GROUP *group,
@@ -91,7 +96,7 @@ int EC_GROUP_get_curve(const EC_GROUP *group,
     return 0;
 }
 
-
+#endif
 #endif /* __KERNEL__ */
 
 
