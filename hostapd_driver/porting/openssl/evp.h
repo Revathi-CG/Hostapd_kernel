@@ -83,6 +83,15 @@ static inline int BN_mod_exp_mont_consttime(BIGNUM *r, const BIGNUM *a, const BI
 static inline int BN_bn2bin(const BIGNUM *a, unsigned char *to) { (void)a; (void)to; return 0; }
 
 #endif
+static inline const EVP_CIPHER *EVP_des_ede3_cbc(void) { return NULL; }
+static inline const EVP_CIPHER *EVP_des_cbc(void)      { return NULL; }
+static inline const EVP_CIPHER *EVP_rc2_ecb(void)      { return NULL; }
+static inline int EVP_CIPHER_CTX_set_key_length(EVP_CIPHER_CTX *ctx, int key_len)
+{
+    (void)ctx;
+    (void)key_len;
+    return 1;  // Return success
+}
 
 
 #endif /* __EVP_H_ */
