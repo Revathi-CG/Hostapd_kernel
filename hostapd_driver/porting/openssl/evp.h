@@ -91,6 +91,65 @@ static inline int BN_mod_exp_mont_consttime(BIGNUM *r, const BIGNUM *a, const BI
 { (void)r; (void)a; (void)p; (void)m; (void)ctx; (void)mont; return 0; }
 static inline int BN_bn2bin(const BIGNUM *a, unsigned char *to) { (void)a; (void)to; return 0; }
 
+static inline void BN_free(BIGNUM *bn) { (void)bn; }
+
+/* Random */
+static inline int BN_rand_range(BIGNUM *r, const BIGNUM *m)
+{ (void)r; (void)m; return 1; }
+
+/* Basic arithmetic */
+static inline int BN_add(BIGNUM *c, const BIGNUM *a, const BIGNUM *b)
+{ (void)c; (void)a; (void)b; return 1; }
+
+static inline int BN_sub(BIGNUM *c, const BIGNUM *a, const BIGNUM *b)
+{ (void)c; (void)a; (void)b; return 1; }
+
+/* Mod operations */
+static inline int BN_mod(BIGNUM *c, const BIGNUM *a, const BIGNUM *b, BN_CTX *ctx)
+{ (void)c; (void)a; (void)b; (void)ctx; return 1; }
+
+static inline int BN_mod_inverse(BIGNUM *c, const BIGNUM *a, const BIGNUM *n, BN_CTX *ctx)
+{ (void)c; (void)a; (void)n; (void)ctx; return 1; }
+
+static inline int BN_mod_add(BIGNUM *r, const BIGNUM *a, const BIGNUM *b,
+                             const BIGNUM *m, BN_CTX *ctx)
+{ (void)r; (void)a; (void)b; (void)m; (void)ctx; return 1; }
+
+static inline int BN_mod_mul(BIGNUM *r, const BIGNUM *a, const BIGNUM *b,
+                             const BIGNUM *m, BN_CTX *ctx)
+{ (void)r; (void)a; (void)b; (void)m; (void)ctx; return 1; }
+
+static inline int BN_mod_sqr(BIGNUM *r, const BIGNUM *a, const BIGNUM *m, BN_CTX *ctx)
+{ (void)r; (void)a; (void)m; (void)ctx; return 1; }
+
+/* Shifts */
+static inline int BN_rshift(BIGNUM *r, const BIGNUM *a, int n)
+{ (void)r; (void)a; (void)n; return 1; }
+
+static inline int BN_rshift1(BIGNUM *r, const BIGNUM *a)
+{ (void)r; (void)a; return 1; }
+
+/* Flags */
+#define BN_FLG_CONSTTIME 1
+
+static inline void BN_set_flags(BIGNUM *a, int flags)
+{ (void)a; (void)flags; }
+
+/* Misc */
+static inline int BN_is_odd(const BIGNUM *a)
+{ (void)a; return 0; }
+
+static inline const BIGNUM *BN_value_one(void)
+{ return (const BIGNUM *)0x1; }
+
+static inline int BN_is_word(const BIGNUM *a, unsigned long w)
+{ (void)a; (void)w; return 0; }
+
+/* Division */
+static inline int BN_div(BIGNUM *dv, BIGNUM *rem,
+                         const BIGNUM *a, const BIGNUM *d, BN_CTX *ctx)
+{ (void)dv; (void)rem; (void)a; (void)d; (void)ctx; return 1; }
+
 #endif
 static inline const EVP_CIPHER *EVP_des_ede3_cbc(void) { return NULL; }
 static inline const EVP_CIPHER *EVP_des_cbc(void)      { return NULL; }
