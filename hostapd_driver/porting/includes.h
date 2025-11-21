@@ -112,7 +112,11 @@
 #include "common.h"
 #include "file_ops.h"
 #include "wpabuf_fix.h"
+
+
+#define CONFIG_AES_CRYPTO_OPENSSL
 #include "aes_encrypt_fix.h"
+
 #include "sha1_prf_fix.h"
 #include "byteswap.h"
 #include "signal.h"

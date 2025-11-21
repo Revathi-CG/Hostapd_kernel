@@ -1,6 +1,5 @@
 #ifndef __LIBNL_H_
 #define __LIBNL_H_
-
 #include <net/genetlink.h>
 
 #include <stddef.h>

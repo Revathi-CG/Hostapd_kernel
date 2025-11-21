@@ -39,13 +39,20 @@ static inline const EVP_CIPHER *EVP_aes_128_ecb(void) { return NULL; }
 static inline const EVP_CIPHER *EVP_aes_192_ecb(void) { return NULL; }
 static inline const EVP_CIPHER *EVP_aes_256_ecb(void) { return NULL; }
 static inline EVP_CIPHER_CTX *EVP_CIPHER_CTX_new(void) { return NULL; }
-static inline void EVP_CIPHER_CTX_free(EVP_CIPHER_CTX *ctx) { }
+static inline void EVP_CIPHER_CTX_free(EVP_CIPHER_CTX *ctx) { (void)ctx;}
 static inline int EVP_EncryptInit_ex(EVP_CIPHER_CTX *ctx,
                                      const EVP_CIPHER *type,
-                                     void *impl,
-                                     const unsigned char *key,
-                                     const unsigned char *iv) { return 0; }
-static inline int EVP_CIPHER_CTX_set_padding(EVP_CIPHER_CTX *ctx, int pad) { return 0; }
+				     void *engine,
+                                     const u8 *key, const u8 *iv) { return 0; }
+static inline int EVP_EncryptUpdate(EVP_CIPHER_CTX *ctx, u8 *out, int *outlen,
+                                    const u8 *in, int inlen) { return 0; }
+static inline int EVP_EncryptFinal_ex(EVP_CIPHER_CTX *ctx, u8 *out, int *outlen) { return 0; }
+static inline int EVP_CIPHER_CTX_set_padding(EVP_CIPHER_CTX *ctx, int padding) { return 0; }
+static inline int EVP_DecryptInit_ex(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *type,
+                                     void *engine, const u8 *key, const u8 *iv) { return 0; }
+static inline int EVP_DecryptUpdate(EVP_CIPHER_CTX *ctx, u8 *out, int *outlen,
+                                    const u8 *in, int inlen) { return 0; }
+static inline int EVP_DecryptFinal_ex(EVP_CIPHER_CTX *ctx, u8 *out, int *outlen) { return 0; }
 
 #endif
 #endif /* __EVP_H_ */

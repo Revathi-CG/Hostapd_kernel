@@ -1,6 +1,7 @@
 #ifndef __STDLIB_H_
 #define __STDLIB_H_
 
+
 #include <linux/slab.h>   // kmalloc, kfree, krealloc
 
 // Replace user-space realloc with kernel-space equivalent
@@ -11,7 +12,12 @@
 // calloc() mapping → kernel equivalent
 #define calloc(n, size) k_calloc(n, size)
 
-#define free(ptr) kfree(ptr)
+#define free(ptr) __kernel_free(ptr)
+
+static inline void __kernel_free(void *ptr)
+{
+    kfree(ptr);
+}
 
 /* Kernel-compatible stub for exit() */
 static inline void exit(int code)

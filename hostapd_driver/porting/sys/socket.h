@@ -1,6 +1,7 @@
 #ifndef __SOCKET_H_
 #define __SOCKET_H_
 
+
 #include <linux/net.h>
 #include <linux/in.h>
 #include <linux/uio.h>
@@ -8,6 +9,8 @@
 #include <linux/file.h>
 #include <linux/sched/signal.h>
 #include <linux/errno.h>
+#include <linux/slab.h>
+
 
 // Kernel-space recvfrom wrapper
 static inline int kernel_recvfrom(int sockfd, void *buf, size_t len, int flags,

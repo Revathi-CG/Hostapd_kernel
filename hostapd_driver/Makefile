@@ -1,4 +1,10 @@
 obj-m += hostapd_driver.o
+# Define the conflicting names to be replaced by Hostapd's unique names
+ccflags-y += -DCONFIG_DRIVER_MODULE -DCONFIG_NO_INTERNAL_IEEE80211_CRYPTO
+ccflags-y += -Daes_encrypt=hostapd_aes_encrypt
+ccflags-y += -Daes_decrypt=hostapd_aes_decrypt
+# Ensure the hostapd_driver-objs section lists all files correctly.
+
 hostapd_driver-objs := 	hostapd-2.11/hostapd/main.o \
 	hostapd-2.11/hostapd/config_file.o \
 	hostapd-2.11/hostapd/../src/ap/hostapd.o \
