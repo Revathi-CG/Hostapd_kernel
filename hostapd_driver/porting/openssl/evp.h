@@ -108,8 +108,8 @@ static inline int BN_sub(BIGNUM *c, const BIGNUM *a, const BIGNUM *b)
 static inline int BN_mod(BIGNUM *c, const BIGNUM *a, const BIGNUM *b, BN_CTX *ctx)
 { (void)c; (void)a; (void)b; (void)ctx; return 1; }
 
-static inline int BN_mod_inverse(BIGNUM *c, const BIGNUM *a, const BIGNUM *n, BN_CTX *ctx)
-{ (void)c; (void)a; (void)n; (void)ctx; return 1; }
+static inline BIGNUM *BN_mod_inverse(BIGNUM *r, const BIGNUM *a, const BIGNUM *n, BN_CTX *ctx)
+{ (void)r; (void)a; (void)n; (void)ctx; return NULL; }
 
 static inline int BN_mod_add(BIGNUM *r, const BIGNUM *a, const BIGNUM *b,
                              const BIGNUM *m, BN_CTX *ctx)

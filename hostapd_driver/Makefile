@@ -53,7 +53,6 @@ hostapd_driver-objs := 	hostapd-2.11/hostapd/main.o \
 	hostapd-2.11/hostapd/../src/eap_server/eap_server.o \
 	hostapd-2.11/hostapd/../src/eap_common/eap_common.o \
 	hostapd-2.11/hostapd/../src/eap_server/eap_server_identity.o \
-	hostapd-2.11/hostapd/../src/crypto/crypto_openssl.o \
 	hostapd-2.11/hostapd/../src/crypto/tls_none.o \
 	hostapd-2.11/hostapd/../src/crypto/sha1-prf.o \
 	hostapd-2.11/hostapd/../src/crypto/sha256-prf.o \
@@ -76,6 +75,7 @@ hostapd_driver-objs := 	hostapd-2.11/hostapd/main.o \
         hostapd-2.11/hostapd/../src/drivers/driver_nl80211_scan.o \
         hostapd-2.11/hostapd/../src/drivers/netlink.o \
         hostapd-2.11/hostapd/../src/eap_server/eap_server_methods.o \
+        hostapd-2.11/hostapd/../src/crypto/crypto_openssl.o \
 
 
  ccflags-y += -I./porting -include porting/includes.h 
