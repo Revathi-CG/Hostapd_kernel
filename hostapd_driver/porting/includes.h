@@ -1,6 +1,12 @@
 #ifndef __PORTING_INCLUDES_H_
 #define __PORTING_INCLUDES_H_
 #include "openssl/asn1_compat.h"
+// In ./porting/includes.h (or wherever you put global defines)
+
+// This flag often disables user-space IO/helper functions in drivers
+#define NO_HOSTAPD_DRV_FUNCTIONS
+
+
 
 /* Disable OpenSSL backend when building inside kernel */
 #undef CONFIG_TLS
@@ -53,11 +59,8 @@
 /* Include kernel netlink definitions */
 #include <linux/netlink.h>
 
-
-#ifdef __KERNEL__
-#else
+#include "driver.h"
 #include "porting_msghdr.h"
-#endif
 
 
 #include "libnl.h"

@@ -78,7 +78,14 @@ hostapd_driver-objs := 	hostapd-2.11/hostapd/main.o \
         hostapd-2.11/hostapd/ctrl_iface.o \
 
 CFLAGS_hostapd-2.11/hostapd/../src/crypto/random.o := -D__HOSTAPD_RANDOM_C__
- ccflags-y += -I./porting -include porting/includes.h 
+# In your main driver Makefile (e.g., in hostapd_driver/Makefile)
+
+# ... (other code like CFLAGS_hostapd-2.11/hostapd/../src/crypto/random.o)
+
+# Inject the flag to hide the static inline definition when compiling the source file
+CFLAGS_hostapd-2.11/hostapd/../src/drivers/driver_nl80211.o := -D__HOSTAPD_DRIVER_NL80211_C__
+
+ccflags-y += -I./porting -include porting/includes.h 
 EXTRA_CFLAGS += -include $(PWD)/hostapd-2.11/src/utils/common.h
 ccflags-y += -I./hostapd-2.11/hostapd 
 ccflags-y += -I./hostapd-2.11/src/ap 
