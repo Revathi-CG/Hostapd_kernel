@@ -3,7 +3,6 @@ obj-m += hostapd_driver.o
 ccflags-y += -DCONFIG_DRIVER_MODULE -DCONFIG_NO_INTERNAL_IEEE80211_CRYPTO
 ccflags-y += -Daes_encrypt=hostapd_aes_encrypt
 ccflags-y += -Daes_decrypt=hostapd_aes_decrypt
-# Ensure the hostapd_driver-objs section lists all files correctly.
 
 hostapd_driver-objs := 	hostapd-2.11/hostapd/main.o \
 	hostapd-2.11/hostapd/config_file.o \
@@ -78,7 +77,8 @@ hostapd_driver-objs := 	hostapd-2.11/hostapd/main.o \
         hostapd-2.11/hostapd/../src/drivers/netlink.o \
         hostapd-2.11/hostapd/../src/eap_server/eap_server_methods.o \
 
-ccflags-y += -I./porting -include porting/includes.h
+
+ ccflags-y += -I./porting -include porting/includes.h 
 EXTRA_CFLAGS += -include $(PWD)/hostapd-2.11/src/utils/common.h
 ccflags-y += -I./hostapd-2.11/hostapd 
 ccflags-y += -I./hostapd-2.11/src/ap 
@@ -109,7 +109,6 @@ ccflags-y += -Wno-format -Wno-format-extra-args
 ccflags-y += -Wno-undef
 
 CFLAGS += -Dhostapd_sendmsg_wrapper=hostapd_sendmsg_wrapper 
-ccflags-y += -DHOSTAPD_COMPILING_CRYPTO_OPENSSL
 
 ccflags-y += -DCONFIG_NO_VLAN
 ccflags-y += -DCONFIG_NO_RADIUS

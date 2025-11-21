@@ -2,6 +2,14 @@
 #define __PORTING_INCLUDES_H_
 #include "openssl/asn1_compat.h"
 
+/* Disable OpenSSL backend when building inside kernel */
+#undef CONFIG_TLS
+#undef CONFIG_TLS_OPENSSL
+#undef CONFIG_CRYPTO_OPENSSL
+
+/* Force internal crypto */
+#define CONFIG_TLS_INTERNAL
+#define CONFIG_CRYPTO_INTERNAL
 
 
 
@@ -120,6 +128,7 @@
 #include "sha1_prf_fix.h"
 #include "byteswap.h"
 #include "signal.h"
+
 #include "openssl/hmac.h"
 #include "linux/types.h"
 // Replace atoi() with kstrtoint() for kernel environment
