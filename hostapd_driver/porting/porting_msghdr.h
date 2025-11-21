@@ -33,13 +33,12 @@ struct porting_user_msghdr {
     unsigned int          msg_flags;
 };
 
-
 /* hostapd calls sendmsg() → porting_sendmsg() */
 static inline ssize_t porting_sendmsg(int sockfd,
-                                      struct user_msghdr *umsg,
+                                      struct porting_user_msghdr *umsg,
                                       int flags)
 {
-    struct porting_user_msghdr *u;
+    struct porting_user_msghdr *u= umsg;
     struct socket *sock;
     struct kvec *kvecs = NULL;
     size_t total = 0;
@@ -70,6 +69,7 @@ static inline ssize_t porting_sendmsg(int sockfd,
         kvecs[i].iov_len  = u->msg_iov[i].iov_len;
         total += kvecs[i].iov_len;
     }
+    #undef msghdr // If the alias passed through, this resets it to the kernel default struct msghdr
 
     /* Build kernel msghdr */
     struct msghdr kmsg = {
