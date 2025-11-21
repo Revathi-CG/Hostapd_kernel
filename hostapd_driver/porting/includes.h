@@ -109,6 +109,8 @@
 
 #include "sys/socket.h"
 
+#include "ieee80211_external.h"
+
 /* This file gets force-included via Makefile to override random_init() */
 #include "random.h"
 #include "errno.h"
@@ -235,6 +237,7 @@ static inline int daemon(int nochdir, int noclose)
 #endif
 
 #include "ctype.h"
+
 
 #endif
 

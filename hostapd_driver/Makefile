@@ -43,7 +43,6 @@ hostapd_driver-objs := 	hostapd-2.11/hostapd/main.o \
 	hostapd-2.11/hostapd/../src/eapol_auth/eapol_auth_sm.o \
 	hostapd-2.11/hostapd/../src/eapol_auth/eapol_auth_dump.o \
 	hostapd-2.11/hostapd/../src/common/ctrl_iface_common.o \
-	hostapd-2.11/hostapd/ctrl_iface.o \
 	hostapd-2.11/hostapd/../src/ap/ctrl_iface_ap.o \
 	hostapd-2.11/hostapd/../src/drivers/rfkill.o \
 	hostapd-2.11/hostapd/../src/utils/radiotap.o \
@@ -76,6 +75,7 @@ hostapd_driver-objs := 	hostapd-2.11/hostapd/main.o \
         hostapd-2.11/hostapd/../src/drivers/netlink.o \
         hostapd-2.11/hostapd/../src/eap_server/eap_server_methods.o \
         hostapd-2.11/hostapd/../src/crypto/crypto_openssl.o \
+        hostapd-2.11/hostapd/ctrl_iface.o \
 
 CFLAGS_hostapd-2.11/hostapd/../src/crypto/random.o := -D__HOSTAPD_RANDOM_C__
  ccflags-y += -I./porting -include porting/includes.h 
