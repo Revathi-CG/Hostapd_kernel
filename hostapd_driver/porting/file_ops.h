@@ -120,6 +120,30 @@ static inline FILE *k_fileno(FILE *fp)
     return fp;  // we keep FILE as struct file* directly
 }
 
+// fwrite() – kernel_write() equivalent
+static inline size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *fp)
+{
+    loff_t pos;
+    ssize_t written;
+    size_t total = size * nmemb;
+
+    if (!fp)
+        return 0;
+
+    /* position to write at (kernel_write needs fp->f_pos copy) */
+    pos = fp->f_pos;
+
+    written = kernel_write(fp, ptr, total, &pos);
+
+    if (written < 0)
+        return 0;
+
+    /* Advance file pointer */
+    fp->f_pos = pos;
+
+    /* Return number of items (NOT bytes) written */
+    return written / size;
+}
 
 #endif
 
