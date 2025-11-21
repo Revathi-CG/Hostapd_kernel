@@ -239,4 +239,122 @@ static inline int CMAC_Final(CMAC_CTX *ctx, unsigned char *out, size_t *poutlen)
 
 /* EVP_CIPHER_CTX_set_key_length stub (returns success) */
 #endif
+
+/* =========================
+ *   RSA / EVP_PKEY / X509 STUBS
+ * ========================= */
+
+typedef void EVP_PKEY;
+typedef void EVP_PKEY_CTX;
+typedef void X509;
+
+#define EVP_PKEY_RSA 1
+#define RSA_PKCS1_OAEP_PADDING 4
+
+/* PEM reader stubs */
+static inline EVP_PKEY *PEM_read_PUBKEY(FILE *fp, void *a, void *b, void *c)
+{
+    (void)fp; (void)a; (void)b; (void)c;
+    return (EVP_PKEY *)0x1;
+}
+
+static inline EVP_PKEY *PEM_read_PrivateKey(FILE *fp, void *a, void *b, void *c)
+{
+    (void)fp; (void)a; (void)b; (void)c;
+    return (EVP_PKEY *)0x1;
+}
+
+static inline X509 *PEM_read_X509(FILE *fp, void *a, void *b, void *c)
+{
+    (void)fp; (void)a; (void)b; (void)c;
+    return (X509 *)0x1;
+}
+
+/* X509 helper stubs */
+static inline void X509_free(X509 *x509) { (void)x509; }
+
+static inline int X509_cmp_current_time(const void *tm)
+{
+    (void)tm;
+    return 0; /* valid */
+}
+
+
+static inline EVP_PKEY *X509_get_pubkey(X509 *x)
+{
+    (void)x;
+    return (EVP_PKEY *)0x1;
+}
+
+/* EVP_PKEY functions */
+static inline void EVP_PKEY_free(EVP_PKEY *p) { (void)p; }
+
+static inline int EVP_PKEY_base_id(EVP_PKEY *pkey)
+{
+    (void)pkey;
+    return EVP_PKEY_RSA;
+}
+
+/* EVP_PKEY_CTX stubs */
+static inline EVP_PKEY_CTX *EVP_PKEY_CTX_new(EVP_PKEY *p, void *e)
+{
+    (void)p; (void)e;
+    return (EVP_PKEY_CTX *)0x1;
+}
+
+static inline void EVP_PKEY_CTX_free(EVP_PKEY_CTX *ctx)
+{
+    (void)ctx;
+}
+
+static inline int EVP_PKEY_encrypt_init(EVP_PKEY_CTX *ctx)
+{
+    (void)ctx;
+    return 1;
+}
+
+static inline int EVP_PKEY_decrypt_init(EVP_PKEY_CTX *ctx)
+{
+    (void)ctx;
+    return 1;
+}
+
+static inline int EVP_PKEY_CTX_set_rsa_padding(EVP_PKEY_CTX *ctx, int pad)
+{
+    (void)ctx; (void)pad;
+    return 1;
+}
+
+static inline int EVP_PKEY_CTX_set_rsa_oaep_md(EVP_PKEY_CTX *ctx, const EVP_MD *md)
+{
+    (void)ctx; (void)md;
+    return 1;
+}
+
+static inline int EVP_PKEY_encrypt(EVP_PKEY_CTX *ctx,
+                                   unsigned char *out, size_t *outlen,
+                                   const unsigned char *in, size_t inlen)
+{
+    (void)ctx; (void)in; (void)inlen;
+    if (outlen) *outlen = 32;
+    if (out) memset(out, 0xAA, 32);
+    return 1;
+}
+
+static inline int EVP_PKEY_decrypt(EVP_PKEY_CTX *ctx,
+                                   unsigned char *out, size_t *outlen,
+                                   const unsigned char *in, size_t inlen)
+{
+    (void)ctx; (void)in; (void)inlen;
+    if (outlen) *outlen = 32;
+    if (out) memset(out, 0xBB, 32);
+    return 1;
+}
+
+/* rewind stub (kernel mode has no stdio rewind) */
+#ifndef rewind
+#define rewind(x) do { (void)(x); } while (0)
+#endif
+
+
 #endif /* __EVP_H_ */
