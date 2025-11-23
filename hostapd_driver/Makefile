@@ -4,6 +4,9 @@ ccflags-y += -DCONFIG_DRIVER_MODULE -DCONFIG_NO_INTERNAL_IEEE80211_CRYPTO
 ccflags-y += -Daes_encrypt=hostapd_aes_encrypt
 ccflags-y += -Daes_decrypt=hostapd_aes_decrypt
 
+# Target specific flags to ensure one matches the Kbuild object path:
+CFLAGS_hostapd-2.11/hostapd/../src/crypto/crypto_openssl.o += -DHOSTAPD_COMPILING_CRYPTO_OPENSSL
+
 hostapd_driver-objs := 	hostapd-2.11/hostapd/main.o \
 	hostapd-2.11/hostapd/config_file.o \
 	hostapd-2.11/hostapd/../src/ap/hostapd.o \
@@ -77,6 +80,7 @@ hostapd_driver-objs := 	hostapd-2.11/hostapd/main.o \
         hostapd-2.11/hostapd/../src/drivers/netlink.o \
         hostapd-2.11/hostapd/../src/eap_server/eap_server_methods.o \
 
+
 CFLAGS_hostapd-2.11/hostapd/../src/crypto/random.o := -D__HOSTAPD_RANDOM_C__
 # In your main driver Makefile (e.g., in hostapd_driver/Makefile)
 
@@ -85,7 +89,6 @@ CFLAGS_hostapd-2.11/hostapd/../src/crypto/random.o := -D__HOSTAPD_RANDOM_C__
 # Inject the flag to hide the static inline definition when compiling the source file
 CFLAGS_hostapd-2.11/hostapd/../src/drivers/driver_nl80211.o := -D__HOSTAPD_DRIVER_NL80211_C__
 
-CFLAGS += -DHOSTAPD_COMPILING_CRYPTO_OPENSSL
 
 ccflags-y += -I./porting -include porting/includes.h 
 EXTRA_CFLAGS += -include $(PWD)/hostapd-2.11/src/utils/common.h

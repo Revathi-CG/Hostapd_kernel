@@ -93,9 +93,10 @@ out:
     crypto_free_shash(tfm);
     return ret;
 }
-
+#ifndef HOSTAPD_COMPILING_CRYPTO_OPENSSL
 /* Redirect all calls to hmac_md5() to kernel_hmac_md5() */
 #define hmac_md5 kernel_hmac_md5
+#endif
 
 #include <linux/kernel.h>
 
@@ -140,10 +141,11 @@ out:
     crypto_free_shash(tfm);
     return ret;
 }
-
+#ifndef HOSTAPD_COMPILING_CRYPTO_OPENSSL
 /* Redirect hostapd calls */
 #define hmac_sha1(key, key_len, data, data_len, digest) \
         kernel_hmac_sha1(key, key_len, data, data_len, digest)
+#endif
 
 /* Kernel-space HMAC-SHA1 for multiple buffers */
 static inline int kernel_hmac_sha1_vector(const u8 *key, size_t key_len,
@@ -188,10 +190,10 @@ out:
     crypto_free_shash(tfm);
     return ret;
 }
+#ifndef HOSTAPD_COMPILING_CRYPTO_OPENSSL
 #define hmac_sha1_vector(key, key_len, num_elem, addr, len, digest) \
         kernel_hmac_sha1_vector(key, key_len, num_elem, addr, len, digest)
-
-
+#endif /* HOSTAPD_COMPILING_CRYPTO_OPENSSL */
 #ifndef MD5_MAC_LEN
 #define MD5_MAC_LEN 16   /* MD5 produces 16-byte digests */
 #endif
@@ -208,7 +210,7 @@ typedef struct {
     struct shash_desc desc;
 } HMAC_CTX;
 
-#ifndef PORTING_DISABLE_KERNEL_HMAC
+#ifndef HOSTAPD_COMPILING_CRYPTO_OPENSSL
 static inline HMAC_CTX *hostapd_HMAC_CTX_new(void)
 {
     HMAC_CTX *ctx = kmalloc(sizeof(HMAC_CTX), GFP_KERNEL);
@@ -257,10 +259,8 @@ static inline int HMAC_Final(HMAC_CTX *ctx, u8 *out, unsigned int *outlen)
 
 /* Only map HMAC_CTX_new to hostapd_HMAC_CTX_new if not compiling crypto_openssl.c */
 #ifndef HOSTAPD_COMPILING_CRYPTO_OPENSSL
-#ifndef HMAC_CTX_new
 #define HMAC_CTX_new hostapd_HMAC_CTX_new
 #define HMAC_CTX_free hostapd_HMAC_CTX_free
-#endif
 #endif /* HOSTAPD_COMPILING_CRYPTO_OPENSSL */
 
 /* ----------------------------------------------------------

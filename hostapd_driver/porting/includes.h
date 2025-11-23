@@ -170,7 +170,6 @@
 #include "byteswap.h"
 #include "signal.h"
 
-#define HOSTAPD_COMPILING_CRYPTO_OPENSSL
 #include "openssl/hmac.h"
 #include "linux/types.h"
 // Replace atoi() with kstrtoint() for kernel environment
