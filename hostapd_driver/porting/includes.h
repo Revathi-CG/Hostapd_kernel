@@ -279,11 +279,11 @@ static inline int daemon(int nochdir, int noclose)
 
 #undef CMSG_FIRSTHDR
 #define CMSG_FIRSTHDR(mhdr) \
-    __cmsg_nxthdr((struct msghdr *)(mhdr), NULL)
+    __cmsg_nxthdr((struct msghdr *)(mhdr), (mhdr)->msg_controllen, NULL)
 
 #undef CMSG_NXTHDR
 #define CMSG_NXTHDR(mhdr, cmsg) \
-    __cmsg_nxthdr((struct msghdr *)(mhdr), (struct cmsghdr *)(cmsg))
+    __cmsg_nxthdr((struct msghdr *)(mhdr),(mhdr)->msg_controllen, (struct cmsghdr *)(cmsg))
 
 static inline ssize_t porting_write_stub(int fd, const void *buf, size_t count)
 {
@@ -319,5 +319,4 @@ static inline int porting_kernel_recvmsg_stub(struct socket *sock, void *umsg_pt
 #define iovec porting_iovec
 
 #endif
-
 
