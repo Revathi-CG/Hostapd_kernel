@@ -12,7 +12,7 @@
 #define NLE_NOMEM ENOMEM
 #endif
 #endif
-#
+
 #define UINT32_MAX 1
 
 /* =====================================
@@ -262,9 +262,10 @@ static inline int porting_nla_put(struct nl_msg *msg, int attrtype, int len, con
 {
     (void)msg; (void)attrtype; (void)len; (void)data; return 0;
 }
+/* This macro intercepts the call and casts the message pointer to our stub's expected type. */
+#define nla_put(msg, attrtype, attrlen, data) \
+    porting_nla_put((struct nl_msg *)(msg), attrtype, attrlen, data)
 #endif
-
-
 
 /* Only for Hostapd internal porting: provide a stub so code compiles */
 /* Stub for genlmsg_put to compile Hostapd against kernel 6.14 */
@@ -483,3 +484,4 @@ static inline int nl_socket_add_membership(void *nl, int group)
 
 
 #endif /* __LIBNL_H_ */
+
