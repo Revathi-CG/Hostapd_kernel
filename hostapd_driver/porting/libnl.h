@@ -535,5 +535,37 @@ static inline int __porting_nla_nest_end(struct nl_msg *msg, struct nlattr *star
 #define nla_nest_end(msg, start) \
     __porting_nla_nest_end((struct nl_msg *)(msg), start)
 
+static inline struct nl_msg *porting_nlmsg_alloc_size(size_t size)
+{
+    // Use kmalloc for the dummy allocation if needed, but returning a static dummy pointer is safer
+    (void)size;
+    return (struct nl_msg *) 0x2;
+}
+#define nlmsg_alloc_size(size) porting_nlmsg_alloc_size(size)
+
+
+// Stub for nlmsg_alloc_simple (returns a dummy pointer)
+static inline struct nl_msg *porting_nlmsg_alloc_simple(int type, int flags)
+{
+    (void)type; (void)flags;
+    return (struct nl_msg *) 0x3;
+}
+#define nlmsg_alloc_simple(type, flags) porting_nlmsg_alloc_simple(type, flags)
+static inline int porting_nlmsg_append(struct nl_msg *msg, void *data, size_t len, int align)
+{
+    // Discard arguments not used by the kernel signature, and handle the type cast.
+    (void)align;
+    
+    // In a real port, you'd use nla_put or nlmsg_put here. 
+    // For stubbing, just return success (0).
+    // The kernel's nlmsg_append returns void * (pointer to appended data), 
+    // but the Hostapd call checks if the return < 0, so we return 0.
+    return 0; 
+}
+
+// Macro to intercept the call, perform the necessary type cast/argument handling, 
+// and map to our stub.
+#define nlmsg_append(msg, data, len, align) \
+    porting_nlmsg_append((struct nl_msg *)(msg), (void *)(data), (size_t)(len), (int)(align))
 #endif /* __LIBNL_H_ */
 
