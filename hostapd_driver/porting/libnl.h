@@ -591,6 +591,8 @@ static inline struct nl_sock *porting_nl_socket_alloc(void)
 }
 // Macro to intercept the call
 #define nl_socket_alloc() porting_nl_socket_alloc()
-
+#ifndef nla_get_string
+#define nla_get_string(attr) ((char *)nla_data(attr))
+#endif
 #endif /* __LIBNL_H_ */
 
