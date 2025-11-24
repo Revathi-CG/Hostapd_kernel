@@ -567,5 +567,30 @@ static inline int porting_nlmsg_append(struct nl_msg *msg, void *data, size_t le
 // and map to our stub.
 #define nlmsg_append(msg, data, len, align) \
     porting_nlmsg_append((struct nl_msg *)(msg), (void *)(data), (size_t)(len), (int)(align))
+// Stub for nl_wait_for_ack (returns 0 for success)
+static inline int porting_nl_wait_for_ack(void *sk)
+{
+    (void)sk;
+    return 0; // Return 0 to simulate successful ACK received
+}
+// Macro to intercept the hostapd call (which uses struct nl_sock *)
+#define nl_wait_for_ack(sk) porting_nl_wait_for_ack((void *)(sk))
+// Define struct nl_sock if not already defined (essential for pointer type)
+#ifndef NL_SOCK_DEFINED
+#define NL_SOCK_DEFINED
+struct nl_sock {
+    int dummy; // Dummy structure definition
+};
+#endif
+
+// Stub for nl_socket_alloc (returns a dummy non-NULL pointer)
+static inline struct nl_sock *porting_nl_socket_alloc(void)
+{
+    // Return a static address for a non-NULL pointer.
+    return (struct nl_sock *) 0x4; 
+}
+// Macro to intercept the call
+#define nl_socket_alloc() porting_nl_socket_alloc()
+
 #endif /* __LIBNL_H_ */
 
