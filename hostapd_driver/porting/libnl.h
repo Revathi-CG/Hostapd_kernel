@@ -12,7 +12,7 @@
 #define NLE_NOMEM ENOMEM
 #endif
 #endif
-
+#
 #define UINT32_MAX 1
 
 /* =====================================
@@ -252,6 +252,9 @@ static inline int porting_nla_put_u32(struct nl_msg *msg, int attrtype, unsigned
 {
     (void)msg; (void)attrtype; (void)val; return 0;
 }
+/* This macro intercepts the call and explicitly casts the message pointer to our stub type. */
+#define nla_put_u32(msg, attrtype, val) \
+    porting_nla_put_u32((struct nl_msg *)(msg), attrtype, val)
 #endif
 
 #ifndef nla_put
@@ -480,4 +483,3 @@ static inline int nl_socket_add_membership(void *nl, int group)
 
 
 #endif /* __LIBNL_H_ */
-
