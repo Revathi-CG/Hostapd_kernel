@@ -73,12 +73,12 @@ hostapd_driver-objs := 	hostapd-2.11/hostapd/main.o \
         hostapd-2.11/hostapd/ctrl_iface.o \
         hostapd-2.11/hostapd/../src/crypto/crypto_openssl.o \
         hostapd-2.11/hostapd/../src/drivers/driver_nl80211.o \
+        hostapd-2.11/hostapd/../src/eap_server/eap_server_methods.o \
         hostapd-2.11/hostapd/../src/drivers/driver_nl80211_capa.o \
         hostapd-2.11/hostapd/../src/drivers/driver_nl80211_event.o \
         hostapd-2.11/hostapd/../src/drivers/driver_nl80211_monitor.o \
         hostapd-2.11/hostapd/../src/drivers/driver_nl80211_scan.o \
         hostapd-2.11/hostapd/../src/drivers/netlink.o \
-        hostapd-2.11/hostapd/../src/eap_server/eap_server_methods.o \
 
 
 CFLAGS_hostapd-2.11/hostapd/../src/crypto/random.o := -D__HOSTAPD_RANDOM_C__
@@ -120,6 +120,8 @@ ccflags-y += -Wno-overflow -Wno-sign-conversion
 ccflags-y += -Wno-format -Wno-format-extra-args
 ccflags-y += -Wno-undef
 ccflags-y += -Wno-unused-function
+ccflags-y += -Wno-int-to-pointer-cast
+ccflags-y  += -Wno-unused-variable
 
 CFLAGS += -Dhostapd_sendmsg_wrapper=hostapd_sendmsg_wrapper 
 
@@ -149,6 +151,7 @@ ccflags-y += -DNLM_F_ACK_TLVS
 ccflags-y += -DSOL_NETLINK
 ccflags-y += -DANDROID_LIB_STUB
 ccflags-y += -DEAP_SERVER_IDENTITY
+ccflags-y += -DHOSTAPD_EAP_SERVER
 
 
 all:

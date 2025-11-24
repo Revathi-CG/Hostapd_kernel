@@ -276,12 +276,48 @@ static inline int daemon(int nochdir, int noclose)
 #endif
 
 #include "ctype.h"
-/* --- ADD THIS AT THE VERY END OF porting/includes.h --- */
-/* Alias struct msghdr to our porting struct ONLY for Hostapd source files. */
-/* This must come AFTER all kernel headers are included. */
+
+#undef CMSG_FIRSTHDR
+#define CMSG_FIRSTHDR(mhdr) \
+    __cmsg_nxthdr((struct msghdr *)(mhdr), NULL)
+
+#undef CMSG_NXTHDR
+#define CMSG_NXTHDR(mhdr, cmsg) \
+    __cmsg_nxthdr((struct msghdr *)(mhdr), (struct cmsghdr *)(cmsg))
+
+static inline ssize_t porting_write_stub(int fd, const void *buf, size_t count)
+{
+    /* Kernel modules cannot easily write to file descriptors like userspace.
+       Stubbing out for compilation. */
+    return count;
+}
+#define write(fd, buf, count) porting_write_stub(fd, buf, count)
+
+
+/* Add this new stub function definition */
+static inline int porting_kernel_recvmsg_stub(struct socket *sock, void *umsg_ptr,
+                                              struct kvec *vec, size_t size, int flags)
+{
+    /* This stub disables the actual recvmsg functionality in the kernel module,
+       which is the goal for userspace APIs like this. */
+    (void)sock; (void)umsg_ptr; (void)vec; (void)size; (void)flags;
+    return 0;
+}
+
+#undef recvmsg
+#define recvmsg(sock, msg, flags) \
+    porting_kernel_recvmsg_stub((struct socket *)(sock), (void *)(msg), NULL, 0, flags)
+
+/*
+#ifndef recvmsg
+#define recvmsg(sock, msg, flags) \
+	kernel_recvmsg((struct socket *)(sock), (struct msghdr *)(void *)(msg), NULL, 0, 0, flags)
+#endif
+*/
+/* ... (Keep your macros for msghdr/iovec at the very end) ... */
 #define msghdr porting_user_msghdr
-/* 2. ADD THIS: Alias iovec so the types match inside the structure */
 #define iovec porting_iovec
+
 #endif
 
 
