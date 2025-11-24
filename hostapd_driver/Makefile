@@ -121,6 +121,7 @@ ccflags-y += -Wno-format -Wno-format-extra-args
 ccflags-y += -Wno-undef
 ccflags-y += -Wno-unused-function
 ccflags-y += -Wno-int-to-pointer-cast
+
 ccflags-y  += -Wno-unused-variable
 
 CFLAGS += -Dhostapd_sendmsg_wrapper=hostapd_sendmsg_wrapper 
