@@ -239,7 +239,13 @@ static inline int porting_nla_put_u16(struct nl_msg *msg, int attrtype, unsigned
 {
     (void)msg; (void)attrtype; (void)val; return 0;
 }
+/* This macro forces the hostapd code to call our stub, and the stub is compatible 
+   with the kernel-mapped nl_msg (sk_buff) type. */
+#define nla_put_u16(msg, attrtype, val) \
+    porting_nla_put_u16((struct nl_msg *)(msg), attrtype, val)
+
 #endif
+
 
 #ifndef nla_put_u32
 static inline int porting_nla_put_u32(struct nl_msg *msg, int attrtype, unsigned int val)
