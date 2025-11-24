@@ -4,9 +4,9 @@
 
 #ifdef __KERNEL__
 // Undefine 'free' to prevent macro expansion conflicts with struct eap_method's 'free' member
-#undef free
+//#undef free
 // Redefine os_free to use kernel's kfree for memory deallocation
-#define os_free kfree
+//#define os_free kfree
 // Ensure eap_method's free function uses kfree in kernel context
 // (This assumes the eap_method's free pointer is set to os_free or similar in hostapd code)
 #else
@@ -167,7 +167,7 @@
 #include "random.h"
 #include "errno.h"
 
-#include "stdlib.h"
+//#include "stdlib.h"
 #include "time.h"
 #include "string.h"
 #include "grp.h"
@@ -260,7 +260,7 @@ static inline int daemon(int nochdir, int noclose)
 
 #ifdef HOSTAPD_KERNEL
 #ifdef HOSTAPD_EAP_SERVER
-#undef free   // Temporarily disable the kernel macro for eap_server
+//#undef free   // Temporarily disable the kernel macro for eap_server
 #endif
 #endif
 
@@ -329,6 +329,7 @@ static inline int porting_kernel_recvmsg_stub(struct socket *sock, void *umsg_pt
 /* ... (Keep your macros for msghdr/iovec at the very end) ... */
 #define msghdr porting_user_msghdr
 #define iovec porting_iovec
+#include "stdlib.h"
 
 #endif
 

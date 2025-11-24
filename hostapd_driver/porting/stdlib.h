@@ -12,12 +12,15 @@
 // calloc() mapping → kernel equivalent
 #define calloc(n, size) k_calloc(n, size)
 
-#define free(ptr) __kernel_free(ptr)
+//#define free(ptr) __kernel_free(ptr)
 
-static inline void __kernel_free(void *ptr)
+
+static inline void free(void *ptr)
 {
     kfree(ptr);
 }
+
+//#define free(ptr) kfree(ptr)
 
 /* Kernel-compatible stub for exit() */
 static inline void exit(int code)
