@@ -85,11 +85,24 @@
 
 #include "driver.h"
 #include "porting_msghdr.h"
+#include "file_ops.h"
 
-
-
+#ifdef ARRAY_SIZE
+#undef ARRAY_SIZE
+#endif
+#include "kshim.h"
 #ifndef HOSTAPD_LIBNL_H_ALREADY_INCLUDED
 #define HOSTAPD_LIBNL_H_ALREADY_INCLUDED
+/* In porting/includes.h (or the file that includes driver_nl80211.h) */
+
+#include "../hostapd-2.11/src/drivers/driver_nl80211.h"
+
+#ifdef nla_nest_start
+#undef nla_nest_start
+#endif
+#include <linux/slab.h>
+#include "libnl.h"
+
 #include "libnl.h"
 #endif
 #ifndef HOSTAPD_NLATTR_ARRAY
@@ -159,7 +172,6 @@
 #include "string.h"
 #include "grp.h"
 #include "common.h"
-#include "file_ops.h"
 #include "wpabuf_fix.h"
 
 

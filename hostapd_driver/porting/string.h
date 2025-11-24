@@ -31,7 +31,9 @@ static inline char *strtok_r(char *str, const char *delim, char **saveptr)
     (void)saveptr;
     return NULL;
 }
-
+#ifdef os_strdup
+#undef os_strdup
+#endif
 /* Macro to replace os_strdup in kernel build */
 #define os_strdup(s) hostapd_strdup(s)
 

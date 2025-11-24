@@ -494,5 +494,46 @@ static inline int porting_nla_put_u8(struct nl_msg *msg, int attrtype, unsigned 
     porting_nla_put_u8((struct nl_msg *)(msg), attrtype, val)
 #endif
 
+#ifndef nla_put_nested
+static inline int porting_nla_put_nested(struct nl_msg *msg, int attrtype, struct nl_msg *nested)
+{
+    // Stub: returns success (0)
+    (void)msg; (void)attrtype; (void)nested;
+    return 0;
+}
+/* Macro to intercept and handle the type cast */
+#define nla_put_nested(msg, attrtype, nested) \
+    porting_nla_put_nested((struct nl_msg *)(msg), attrtype, (struct nl_msg *)(nested))
+#endif
+
+
+/* 1. Define the actual function stub using a unique, internal name */
+static inline struct nlattr * __porting_nla_nest_start(struct sk_buff *skb, int attrtype)
+{
+    (void)skb; (void)attrtype;
+    /* Returns a dummy non-NULL pointer to allow Hostapd logic flow to continue */
+    return (struct nlattr *) 0x1;
+}
+#define __nla_nest_start_cast(msg, attrtype) \
+    __porting_nla_nest_start((struct sk_buff *)(msg), attrtype)
+#define nla_nest_start(msg, attrtype) \
+    __nla_nest_start_cast(msg, NLA_F_NESTED | (attrtype))
+
+
+#ifdef nla_nest_end
+#undef nla_nest_end
+#endif
+
+/* Unique stub function */
+static inline int __porting_nla_nest_end(struct nl_msg *msg, struct nlattr *start)
+{
+    (void)msg; (void)start;
+    return 0;
+}
+
+/* Macro to intercept, cast, and call the unique stub */
+#define nla_nest_end(msg, start) \
+    __porting_nla_nest_end((struct nl_msg *)(msg), start)
+
 #endif /* __LIBNL_H_ */
 
