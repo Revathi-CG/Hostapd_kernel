@@ -481,7 +481,18 @@ static inline int nl_socket_add_membership(void *nl, int group)
 
 
 #endif
+#ifndef nla_put_u8
+static inline int porting_nla_put_u8(struct nl_msg *msg, int attrtype, unsigned char val)
+{
+    // Stub: simply avoid attribute insertion and return success (0).
+    (void)msg; (void)attrtype; (void)val; 
+    return 0;
+}
 
+/* This macro intercepts the call and casts the message pointer to the stub's expected type. */
+#define nla_put_u8(msg, attrtype, val) \
+    porting_nla_put_u8((struct nl_msg *)(msg), attrtype, val)
+#endif
 
 #endif /* __LIBNL_H_ */
 
